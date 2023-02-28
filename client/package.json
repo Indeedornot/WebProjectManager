@@ -1,0 +1,17 @@
+{
+	"name": "client",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"build": "cross-env NODE_ENV=development npx tailwindcss -i ./wwwroot/css/tailwindcss/input.css -o ./wwwroot/css/tailwindcss/output.css --watch",
+		"release": "cross-env NODE_ENV=production npx tailwindcss -i ./wwwroot/css/tailwindcss/input.css -o ./wwwroot/css/tailwindcss/output.css --minify"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"cross-env": "^7.0.3",
+		"tailwindcss": "^3.2.7"
+	}
+}
