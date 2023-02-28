@@ -109,7 +109,8 @@ csharp_style_prefer_readonly_struct = true
 # Code-block preferences
 csharp_prefer_braces = true:suggestion
 csharp_prefer_simple_using_statement = true
-csharp_style_namespace_declarations = file_scoped:suggestion
+csharp_style_namespace_declarations = file_scoped
+dotnet_diagnostic.IDE0161.severity = error
 csharp_style_prefer_method_group_conversion = true:suggestion
 csharp_style_prefer_top_level_statements = true:suggestion
 
