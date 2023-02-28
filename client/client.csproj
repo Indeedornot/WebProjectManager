@@ -9,4 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Tailwind.Extensions.AspNetCore" Version="1.0.0-beta2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\shared\shared.csproj" />
+  </ItemGroup>
 </Project>
