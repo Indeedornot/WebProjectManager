@@ -7,10 +7,18 @@
     <link rel="stylesheet" href="~/css/tailwindcss/output.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/client.styles.css" asp-append-version="true" />
 </head>
-<body>
-    <div class="h-screen w-screen">
+<body class="h-screen w-screen flex flex-none flex-col">
+    <header class="h-16 bg-dark">
+
+    </header>
+
+    <div class="flex-grow">
         @RenderBody()
     </div>
+
+    <footer class="h-12 bg-dark">
+
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
