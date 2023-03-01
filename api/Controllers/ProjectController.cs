@@ -29,9 +29,10 @@ public class ProjectController : ControllerBase {
     }
 
     [HttpPost("CreateProject")]
-    public IActionResult CreateProject(ProjectDTO project) {
-        db.Projects.Add((Project)project);
+    public Project CreateProject(ProjectDTO newProject) {
+        var project = db.Projects.Add((Project)newProject);
         db.SaveChanges();
-        return CreatedAtRoute("GetProject", new { id = project.Id }, project);
+
+        return project.Entity;
     }
 }
