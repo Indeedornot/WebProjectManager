@@ -1,3 +1,36 @@
 ﻿@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --color-bg-dark: 32 34 37;
+    --color-bg-default: 54 57 63;
+    --color-bg-hover: 50 53 59;
+    --color-bg-subtle: 64 68 75;
+    --color-bg-icon: 220 221 222;
+    --color-bg-emphasis: 255 255 255;
+    --color-bg-overlay: 41 43 47;
+
+    --color-bg-online: 59 165 93;
+    --color-bg-offline: 116 127 141;
+    --color-bg-busy: 250 166 26;
+    --color-bg-away: 237 66 69;
+
+    --color-bg-accent: 9 105 218;
+    --color-fg-accent: 255 255 255;
+
+    --color-fg-default: 220 221 222;
+    --color-fg-muted: 114 118 125;
+    --color-fg-disabled: 70 74 80;
+    --color-fg-icon-bg: 64 68 75;
+    --color-fg-icon: 220 221 222;
+    --color-fg-emphasis: 255 255 255;
+    --color-fg-anchor: 0 175 244;
+
+    --color-caret-default: 220 221 222;
+
+    --color-border-default: 48 54 61;
+    --color-border-muted: 33 38 45;
+    --color-border-subtle: 240 246 252 / 0.1;
+    --color-border-emphasis: 255 255 255;
+}
