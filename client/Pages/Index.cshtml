@@ -1,4 +1,6 @@
 ﻿@page
+@using System.Collections.Generic
+@using shared.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
@@ -11,6 +13,8 @@
     </div>
     
     <div class="flex flex-grow flex-col">
-        
+        @await (
+            Html.RenderComponentAsync<ProjectTable>(RenderMode.ServerPrerendered, new ProjectTable() { Projects = new List<Project>() })
+        )
     </div>
 </div>

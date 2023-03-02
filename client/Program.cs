@@ -4,6 +4,8 @@ using Tailwind;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddServerSideBlazor();
+
 // Add services to the container.
 builder.Services.AddRazorPages();
 
@@ -32,5 +34,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.MapBlazorHub();
 
 app.Run();

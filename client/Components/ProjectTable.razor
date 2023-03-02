@@ -1,0 +1,40 @@
+﻿@using shared.Models
+@using System.Collections.Generic
+
+<table>
+    <th>
+        <td>Id</td>
+        <td>Name</td>
+        <td>Description</td>
+        <td>Due Date</td>
+        <td>Status</td>
+        <td>Assignees</td>
+    </th>
+    @foreach (var project in Projects)
+    {
+        <tr>
+            <td>@project.Id</td>
+            <td>@project.Name</td>
+            <td>@project.Description</td>
+            <td>@project.DueDate</td>
+            <td>@project.Status</td>
+            <td>
+                <details>
+                    <summary>Assignees</summary>
+                    <ul>
+                        @foreach (var assignee in project.Assignees)
+                        {
+                            <li>@assignee</li>
+                        }
+                    </ul>
+                </details>
+            </td>
+        </tr>
+    }
+</table>
+
+@code {
+    [EditorRequired]
+    [Parameter]
+    public IEnumerable<Project> Projects { get; set; }
+}
