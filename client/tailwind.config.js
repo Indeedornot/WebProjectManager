@@ -59,5 +59,6 @@ module.exports = {
 			addVariant('child', '& > *');
 			addVariant('child-hover', '& > *:hover');
 		},
+		'@tailwindcss/forms',
 	],
 };
