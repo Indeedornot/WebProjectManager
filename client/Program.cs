@@ -5,6 +5,7 @@ using Tailwind;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddServerSideBlazor();
+builder.WebHost.UseStaticWebAssets();
 
 // Add services to the container.
 builder.Services.AddRazorPages();
