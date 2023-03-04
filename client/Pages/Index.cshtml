@@ -13,8 +13,6 @@
     </div>
     
     <div class="flex flex-grow flex-col">
-        @await (
-            Html.RenderComponentAsync<ProjectTable>(RenderMode.ServerPrerendered, new ProjectTable() { Projects = new List<Project>() })
-        )
+
     </div>
 </div>
