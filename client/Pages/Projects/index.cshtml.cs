@@ -7,11 +7,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace client.Pages.Crud;
-public class Projects : PageModel {
-    private readonly ILogger<Projects> _logger;
+namespace client.Pages.Projects;
+public class IndexModel : PageModel {
+    private readonly ILogger<IndexModel> _logger;
 
-    public Projects(ILogger<Projects> logger) {
+    public IndexModel(ILogger<IndexModel> logger) {
         _logger = logger;
     }
 
