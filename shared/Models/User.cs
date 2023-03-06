@@ -8,11 +8,15 @@ namespace shared.Models;
 public class User {
     public int Id { get; set; }
     public string Name { get; set; }
+    public Uri Avatar { get; set; }
+
     public IEnumerable<Project> Projects { get; set; }
 }
 
 public class UserDTO {
     public int Id { get; set; }
+
+    public Uri Avatar { get; set; }
 
     public string Name { get; set; }
 
