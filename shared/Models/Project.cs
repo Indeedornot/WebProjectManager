@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace shared.Models;
-public class Project {
+public class Project : BaseEntity {
     //here projects means a task, with an assignee, a due date, and a status
     public int Id { get; set; }
     public string Name { get; set; }
@@ -14,7 +14,7 @@ public class Project {
     public IEnumerable<User> Assignees { get; set; }
 }
 
-public class ProjectDTO {
+public class ProjectDTO : BaseEntity {
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime DueDate { get; set; }
@@ -27,7 +27,9 @@ public class ProjectDTO {
             Description = projectDTO.Description,
             DueDate = projectDTO.DueDate,
             Status = projectDTO.Status,
-            Assignees = projectDTO.Assignees
+            Assignees = projectDTO.Assignees,
+            CreatedAt = projectDTO.CreatedAt,
+            UpdatedAt = projectDTO.UpdatedAt
         };
     }
 }
