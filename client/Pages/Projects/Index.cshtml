@@ -14,7 +14,7 @@
     <div class="flex flex-grow flex-col items-center">
         <div class="w-3/4 flex flex-none items-center h-full flex-col">
             @await (
-                Html.RenderComponentAsync<Components.Projects.Table>(RenderMode.ServerPrerendered, new ProjectTable() { Projects = new List<Project>() })
+                Html.RenderComponentAsync<Components.Projects.Table>(RenderMode.ServerPrerendered, new Components.Projects.Table() { Projects = new List<Project>() })
             )
         </div>
     </div>
