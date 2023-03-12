@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 client/wwwroot/css/tailwindcss/output.css
 .idea
+safurai.yml
