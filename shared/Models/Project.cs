@@ -12,24 +12,24 @@ public class Project : BaseEntity {
     public DateTime DueDate { get; set; }
     public string Status { get; set; }
     public IEnumerable<User> Assignees { get; set; }
+
+    public static explicit operator ProjectDTO(Project project) {
+        return new ProjectDTO {
+            Id = project.Id,
+            Name = project.Name,
+            Description = project.Description,
+            DueDate = project.DueDate,
+            Status = project.Status,
+            Assignees = project.Assignees.Select(u => (UserDTO)u)
+        };
+    }
 }
 
 public class ProjectDTO : BaseEntity {
+    public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime DueDate { get; set; }
     public string Status { get; set; }
-    public IEnumerable<User> Assignees { get; set; }
-
-    public static explicit operator Project(ProjectDTO projectDTO) {
-        return new Project {
-            Name = projectDTO.Name,
-            Description = projectDTO.Description,
-            DueDate = projectDTO.DueDate,
-            Status = projectDTO.Status,
-            Assignees = projectDTO.Assignees,
-            CreatedAt = projectDTO.CreatedAt,
-            UpdatedAt = projectDTO.UpdatedAt
-        };
-    }
+    public IEnumerable<UserDTO> Assignees { get; set; }
 }
