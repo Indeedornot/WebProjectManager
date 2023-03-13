@@ -4,9 +4,23 @@
 
 <div class="w-screen h-screen">
     <main class="w-full h-full flex flex-none flex-col">
-        <div class="top-row px-4">
-            <LoginDisplay/>
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+        <div class="h-14 px-4 border-b border-b-muted grid grid-flow-col">
+            <div class="h-full justify-self-start flex items-center">
+                <NavLink href="/">Home</NavLink>
+                <AuthorizeView>
+                    <Authorized>
+                        <NavLink href="/projects/">Projects</NavLink>
+                    </Authorized>
+                    <NotAuthorized>
+
+                    </NotAuthorized>
+                </AuthorizeView>
+            </div>
+
+            <div class="h-full justify-self-end flex items-center space-x-2 whitespace-nowrap">
+                <LoginDisplay/>
+                <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            </div>
         </div>
 
         <div class="w-full flex-grow">
