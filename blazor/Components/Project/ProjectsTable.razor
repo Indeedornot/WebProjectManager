@@ -1,0 +1,15 @@
+﻿@using System.Collections.Generic
+
+<div class="w-full flex flex-col flex-none space-y-1 overflow-auto">
+    @foreach (var project in Projects) {
+        <ProjectDisplay Project="@project"/>
+    }
+</div>
+
+@code {
+
+    [EditorRequired]
+    [Parameter]
+    public IEnumerable<ProjectDTO> Projects { get; set; } = SampleData.Projects;
+
+}

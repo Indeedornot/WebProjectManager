@@ -1,0 +1,23 @@
+﻿@inject NavigationManager NavManager
+
+<div class="h-10 items-center grid grid-flow-col justify-between">
+    <div class="flex flex-none min-w-0">
+        <div class="aspect-square h-10 rounded-md border-subtle border-2">
+            <img src="@User.Avatar" class="rounded-md" alt="User Avatar"/>
+        </div>
+        <a class="text-emphasis text-xl truncate ml-1.5 leading-10">@User.Name</a>
+    </div>
+</div>
+
+@code {
+
+    [Parameter]
+    public UserDTO User { get; set; }
+
+    private string userDisplayUrl => "/users/display/" + User.Id;
+
+    private void NavigateToUserDisplay() {
+        NavManager.NavigateTo(userDisplayUrl, true);
+    }
+
+}
