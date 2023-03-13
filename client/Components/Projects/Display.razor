@@ -1,0 +1,42 @@
+﻿<div class="bg-dark rounded-md py-1 px-2 flex flex-none flex-col ml-1.5">
+    <div class="items-center grid-flow-col grid">
+        <h1 class="text-emphasis text-xl truncate">@Project.Name</h1>
+        <div class="justify-self-end flex flex-grow flex-none items-center">
+            <p class="text-default text-sm mr-1">
+                due: @Project.DueDate.ToString("dd/MM/yyyy")
+            </p>
+            <button @onclick="@ToggleExpanded">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-darkreader-inline-stroke="" style="--darkreader-inline-stroke:currentColor;">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </button>
+        </div>
+
+    </div>
+
+    <span class="text-muted text-sm break-all @(IsExpanded ? "" : "description")">@Project.Description asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd</span>
+
+    @if (IsExpanded) {
+        <div class="mt-1">
+            <h1 class="text-lg text-emphasis">Assignees: </h1>
+            <div class="space-y-1 ml-1 mt-1 grid grid-auto-repeat">
+                @foreach (var user in Project.Assignees) {
+                    <client.Components.Users.Profile User="@user"></client.Components.Users.Profile>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public ProjectDTO Project { get; set; } = SampleData.Projects.ElementAt(0);
+
+    private bool IsExpanded { get; set; } = false;
+
+    private void ToggleExpanded() {
+        IsExpanded = !IsExpanded;
+    }
+
+}

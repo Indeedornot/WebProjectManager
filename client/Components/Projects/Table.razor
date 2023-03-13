@@ -1,58 +1,15 @@
 ﻿@using System.Collections.Generic
 
-<table class="w-full bg-dark rounded-t-md">
-    <thead>
-        <tr class="text-emphasis text-left child:px-3 child:py-1.5 child:text-center">
-            <th>Id</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Assignees</th>
-            <th></th> @* Edit *@
-            <th></th> @* Delete *@
-            <th></th> @* Show *@
-        </tr>
-    </thead>
-    <tbody class="text-default bg-overlay">
-        @if (!Projects.Any()) {
-            for (int i = 0; i < RowsIfNullOrEmpty; i++){
-                <tr class="h-[30px]">
-                    <td></td> @* Id *@
-                    <td></td> @* Name *@
-                    <td></td> @* Description *@
-                    <td></td> @* Due Date *@
-                    <td></td> @* Status *@
-                    <td></td> @* Assignees *@
-                    <td></td> @* Edit *@
-                    <td></td> @* Delete *@
-                    <td></td> @* Show *@
-                </tr>
-            }
-        } else {
-            foreach(var project in Projects) {
-                <tr>
-                    <td>@project.Id</td>
-                    <td>@project.Name</td>
-                    <td>@project.Description</td>
-                    <td>@project.DueDate</td>
-                    <td>@project.Status</td>
-                    <td>@project.Assignees</td>
-                    <td><a>Edit</a></td>
-                    <td><a>Delete</a></td>
-                    <td><a>Show</a></td>
-                </tr>
-            }
-        }
-    </tbody>
-</table>
+<div class="w-full flex flex-col flex-none space-y-1 overflow-auto">
+    @foreach (var project in Projects) {
+        <Display Project="@project"/>
+    }
+</div>
 
 @code {
-    [EditorRequired]
-    [Parameter]
-    public IEnumerable<Project> Projects { get; set; }
 
     [EditorRequired]
     [Parameter]
-    public int RowsIfNullOrEmpty { get; set; } = 5;
+    public IEnumerable<ProjectDTO> Projects { get; set; } = SampleData.Projects;
+
 }

@@ -1,0 +1,14 @@
+﻿.description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.grid-auto-repeat {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fill, 186px);
+}
