@@ -364,3 +364,5 @@ FodyWeavers.xsd
 client/wwwroot/css/tailwindcss/output.css
 .idea
 safurai.yml
+
+blazor/wwwroot/css/tailwindcss/output.css
