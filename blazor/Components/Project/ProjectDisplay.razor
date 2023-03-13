@@ -21,7 +21,7 @@
             <h1 class="text-lg text-emphasis">Assignees: </h1>
             <div class="space-y-1 ml-1 mt-1 grid grid-auto-repeat">
                 @foreach (var user in Project.Assignees) {
-                    <client.components.users.profile User="@user"></client.components.users.profile>
+                    <UserDisplay User="@user"></UserDisplay>
                 }
             </div>
         </div>
