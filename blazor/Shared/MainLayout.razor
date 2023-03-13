@@ -2,19 +2,15 @@
 
 <PageTitle>blazor</PageTitle>
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
-
-    <main>
-        <div class="top-row px-4 auth">
-            <LoginDisplay />
+<div class="w-screen h-screen">
+    <main class="w-full h-full flex flex-none flex-col">
+        <div class="top-row px-4">
+            <LoginDisplay/>
             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
         </div>
 
-        <article class="content px-4">
+        <div class="w-full flex-grow">
             @Body
-        </article>
+        </div>
     </main>
 </div>
