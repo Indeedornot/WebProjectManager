@@ -1,13 +1,12 @@
-using System.Security.Claims;
-
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace blazor.Areas.Identity;
+using System.Security.Claims;
 
+namespace blazor.Areas.Identity;
 public class RevalidatingIdentityAuthenticationStateProvider<TUser>
     : RevalidatingServerAuthenticationStateProvider where TUser : class {
     private readonly IServiceScopeFactory _scopeFactory;
