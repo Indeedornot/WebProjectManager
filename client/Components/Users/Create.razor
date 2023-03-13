@@ -1,9 +1,47 @@
-﻿<div class="flex flex-col w-full h-full space-y-0.5 child:h-1/6">
-    <input class="rounded-md bg-dark text-default pl-1" type="text" placeholder="Name"/>
-    <input class="rounded-md bg-dark text-default pl-1" type="password" placeholder="Password"/>
-    <input class="rounded-md bg-accent text-emphasis" type="submit"/>
+﻿<div method="post" class="flex flex-col w-full h-full space-y-0.5">
+    <div class="h-2/6 flex flex-none items-center justify-center mb-1">
+        <button @onclick="@RandomizeAvatar" class="rounded-full h-full aspect-square mt-0 p-0 bg-dark">
+            <img src="@avatarUrl" class="rounded-full h-full w-full"/>
+        </button>
+    </div>
+        <input class="rounded-md bg-dark text-default pl-1 h-1/6" type="text" placeholder="Avatar Link" @bind="@avatarInput"/>
+    <input class="rounded-md bg-dark text-default pl-1 h-1/6" type="text" minlength="1" placeholder="Name"/>
+    <input class="rounded-md bg-dark text-default pl-1 h-1/6" type="password" placeholder="Password"/>
+    <input class="rounded-md bg-accent text-emphasis h-1/6" type="submit"/>
 </div>
 
 @code {
+    private Uri _avatarUrl;
+    private Uri avatarUrl {
+        get => _avatarUrl; 
+        set {
+            _avatarUrl = value;
+            _avatarInput = value.ToString();
+        }
+    }
 
+    private string _avatarInput;
+    private string avatarInput { 
+        get => _avatarInput; 
+        set {
+            Uri? url;
+            _avatarInput = value;
+
+            if(Uri.TryCreate(value, UriKind.Absolute, out url)) {
+                avatarUrl = url;
+            }   
+        } 
+    }
+
+    public Create() {
+        avatarUrl = GetRandomAvatar();
+    }
+
+    private void RandomizeAvatar() {
+        avatarUrl = GetRandomAvatar();
+    }
+
+    private static Uri GetRandomAvatar() {
+        return new Uri($"https://gravatar.com/avatar/{Guid.NewGuid().ToString("N")}?s=400&d=retro");
+    }
 }

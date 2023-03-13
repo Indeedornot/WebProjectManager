@@ -8,12 +8,10 @@
         <h1 class="text-6xl">Welcome</h1>
         <p class="text-default mt-2">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
     </div>
-    
+
     <div class="flex flex-grow flex-col items-center">
         <div class="w-1/4 h-1/2 flex flex-none items-center flex-col">
-            @await (
-                Html.RenderComponentAsync<Components.Users.Create>(RenderMode.ServerPrerendered)
-            )
+            @await (Html.RenderComponentAsync<Components.Users.Create>(RenderMode.ServerPrerendered))
         </div>
     </div>
 </div>
