@@ -1,6 +1,3 @@
-using blazor.Areas.Identity;
-using blazor.Data;
-
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -13,24 +10,14 @@ using Tailwind;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ??
-                          throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
     app.RunTailwind("build", "./");
-    app.UseMigrationsEndPoint();
 }
 else {
     app.RunTailwind("release", "./");
