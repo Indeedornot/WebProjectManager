@@ -4,6 +4,7 @@ using Duende.IdentityServer.EntityFramework.Mappers;
 using Duende.IdentityServer.Models;
 
 using IdentityServer;
+using IdentityServer.Data;
 using IdentityServer.Pages.Admin.ApiScopes;
 using IdentityServer.Pages.Admin.Clients;
 using IdentityServer.Pages.Admin.IdentityScopes;

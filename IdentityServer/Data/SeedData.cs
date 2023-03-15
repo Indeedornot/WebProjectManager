@@ -10,21 +10,21 @@ namespace IdentityServer;
 
 public class SeedData {
     public static void EnsureSeedData(WebApplication app) {
-        using (var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope()) {
-            scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
+        using IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+        scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
 
-            var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
-            context.Database.Migrate();
-            EnsureSeedData(context);
-        }
+        ConfigurationDbContext context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+        context.Database.Migrate();
+        EnsureSeedData(context);
     }
 
     private static void EnsureSeedData(ConfigurationDbContext context) {
         if (!context.Clients.Any()) {
             Log.Debug("Clients being populated");
-            foreach (var client in Config.Clients.ToList()) {
+            foreach (Client client in Config.Clients.ToList()) {
                 context.Clients.Add(client.ToEntity());
             }
+
             context.SaveChanges();
         }
         else {
@@ -33,9 +33,10 @@ public class SeedData {
 
         if (!context.IdentityResources.Any()) {
             Log.Debug("IdentityResources being populated");
-            foreach (var resource in Config.IdentityResources.ToList()) {
+            foreach (IdentityResource resource in Config.IdentityResources.ToList()) {
                 context.IdentityResources.Add(resource.ToEntity());
             }
+
             context.SaveChanges();
         }
         else {
@@ -44,9 +45,10 @@ public class SeedData {
 
         if (!context.ApiScopes.Any()) {
             Log.Debug("ApiScopes being populated");
-            foreach (var resource in Config.ApiScopes.ToList()) {
+            foreach (ApiScope resource in Config.ApiScopes.ToList()) {
                 context.ApiScopes.Add(resource.ToEntity());
             }
+
             context.SaveChanges();
         }
         else {
@@ -56,10 +58,7 @@ public class SeedData {
         if (!context.IdentityProviders.Any()) {
             Log.Debug("OIDC IdentityProviders being populated");
             context.IdentityProviders.Add(new OidcProvider {
-                Scheme = "demoidsrv",
-                DisplayName = "IdentityServer",
-                Authority = "https://demo.duendesoftware.com",
-                ClientId = "login",
+                Scheme = "demoidsrv", DisplayName = "IdentityServer", Authority = "https://demo.duendesoftware.com", ClientId = "login"
             }.ToEntity());
             context.SaveChanges();
         }
