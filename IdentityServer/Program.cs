@@ -1,4 +1,5 @@
 ﻿using IdentityServer;
+
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -7,8 +8,7 @@ Log.Logger = new LoggerConfiguration()
 
 Log.Information("Starting up");
 
-try
-{
+try {
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Host.UseSerilog((ctx, lc) => lc
@@ -19,15 +19,13 @@ try
     var app = builder
         .ConfigureServices()
         .ConfigurePipeline();
-    
+
     app.Run();
 }
-catch (Exception ex)
-{
+catch (Exception ex) {
     Log.Fatal(ex, "Unhandled exception");
 }
-finally
-{
+finally {
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
 }

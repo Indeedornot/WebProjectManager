@@ -1,12 +1,10 @@
 namespace IdentityServer.Pages.Grants;
 
-public class ViewModel
-{
+public class ViewModel {
     public IEnumerable<GrantViewModel> Grants { get; set; }
 }
 
-public class GrantViewModel
-{
+public class GrantViewModel {
     public string ClientId { get; set; }
     public string ClientName { get; set; }
     public string ClientUrl { get; set; }

@@ -4,8 +4,7 @@
 
 namespace IdentityServer.Pages.Device;
 
-public class DeviceOptions
-{
+public class DeviceOptions {
     public static bool EnableOfflineAccess = true;
     public static string OfflineAccessDisplayName = "Offline Access";
     public static string OfflineAccessDescription = "Access to your applications and resources, even when you are offline";
