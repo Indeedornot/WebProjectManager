@@ -1,6 +1,8 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 
+using shared.IdentityServer;
+
 namespace IdentityServer;
 
 public static class Config {
@@ -9,7 +11,7 @@ public static class Config {
 
 
     public static IEnumerable<ApiScope> ApiScopes =>
-        new List<ApiScope> { new("api1", "My API") };
+        new List<ApiScope> { Scopes.ProjectScope };
 
     public static IEnumerable<Client> Clients =>
         new List<Client> {
@@ -19,7 +21,7 @@ public static class Config {
                 ClientSecrets = { new Secret("secret".Sha256()) },
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
                 // scopes that client has access to
-                AllowedScopes = { "api1" }
+                AllowedScopes = { Scopes.ProjectScope.Name }
             },
 
             // interactive ASP.NET Core Web App
@@ -34,7 +36,9 @@ public static class Config {
                 // where to redirect to after logout
                 PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
                 AllowOfflineAccess = true,
-                AllowedScopes = new List<string> { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, "api1" }
+                AllowedScopes = new List<string> {
+                    IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, Scopes.ProjectScope.Name
+                }
             }
         };
 }
