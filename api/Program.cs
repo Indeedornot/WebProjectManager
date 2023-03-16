@@ -2,6 +2,7 @@ using api.Database;
 
 using IdentityModel;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 using shared.Common;
@@ -24,17 +25,17 @@ builder.Services.AddAuthorization(options => {
         Scopes.ProjectScope.Name,
         policy => {
             policy.RequireAuthenticatedUser();
-            policy.RequireAssertion(context => context.User.HasClaim(JwtClaimTypes.Scope, Scopes.ProjectScope.Name));
+            policy.RequireClaim("scope", Scopes.ProjectScope.Name);
         }
     );
 });
 
 //Require any token from IdentityServer
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer("Bearer",
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(
         options => {
             options.Authority = IPs.IdentityServer;
-            options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
+            options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false, ValidTypes = new[] { "at+jwt" } };
         });
 
 WebApplication? app = builder.Build();
@@ -47,9 +48,12 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers().RequireAuthorization(Scopes.ProjectScope.Name);
+app.MapControllers()
+    .RequireAuthorization(Scopes.ProjectScope.Name);
 
 app.Run();
