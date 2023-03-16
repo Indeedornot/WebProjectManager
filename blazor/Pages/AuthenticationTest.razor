@@ -1,7 +1,7 @@
 ﻿@page "/AuthenticationTest"
+@using blazor.Api
 @attribute [Authorize]
-
-@inject HttpClient httpClient
+@inject IWebApi webApi
 
 <h3>AuthenticationTest</h3>
 <p>@Hi</p>
@@ -10,5 +10,8 @@
 
     public string? Hi { get; set; }
 
+    protected override async Task OnInitializedAsync() {
+        Hi = await webApi.Hello();
+    }
 
 }

@@ -1,6 +1,11 @@
 using blazor;
+using blazor.Api;
+
+using Refit;
 
 using Microsoft.IdentityModel.Logging;
+
+using shared.Common;
 
 using Tailwind;
 
@@ -13,6 +18,13 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddConfiguredIdentityServer();
 
 builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddTransient<HeaderHandler>();
+builder.Services.AddRefitClient<IWebApi>()
+    .ConfigureHttpClient(c => {
+        c.BaseAddress = new Uri(IPs.Api);
+    }).AddHttpMessageHandler<HeaderHandler>();
+
 
 WebApplication app = builder.Build();
 
