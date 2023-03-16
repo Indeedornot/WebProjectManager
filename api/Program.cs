@@ -1,6 +1,12 @@
 using api.Database;
 
-var builder = WebApplication.CreateBuilder(args);
+using IdentityModel;
+
+using Microsoft.IdentityModel.Tokens;
+
+using shared.Common;
+
+WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -12,7 +18,26 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+//Require certain token
+builder.Services.AddAuthorization(options => {
+    options.AddPolicy(
+        Scopes.ProjectScope.Name,
+        policy => {
+            policy.RequireAuthenticatedUser();
+            policy.RequireAssertion(context => context.User.HasClaim(JwtClaimTypes.Scope, Scopes.ProjectScope.Name));
+        }
+    );
+});
+
+//Require any token from IdentityServer
+builder.Services.AddAuthentication("Bearer")
+    .AddJwtBearer("Bearer",
+        options => {
+            options.Authority = IPs.IdentityServer;
+            options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false };
+        });
+
+WebApplication? app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
@@ -22,8 +47,9 @@ if (app.Environment.IsDevelopment()) {
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.MapControllers().RequireAuthorization(Scopes.ProjectScope.Name);
 
 app.Run();

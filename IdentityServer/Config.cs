@@ -1,44 +1,38 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 
-using shared.IdentityServer;
+using shared.Common;
 
 namespace IdentityServer;
 
 public static class Config {
     public static IEnumerable<IdentityResource> IdentityResources =>
-        new List<IdentityResource> { new IdentityResources.OpenId(), new IdentityResources.Profile() };
-
+        new IdentityResource[] { new IdentityResources.OpenId(), new IdentityResources.Profile() };
 
     public static IEnumerable<ApiScope> ApiScopes =>
-        new List<ApiScope> { Scopes.ProjectScope };
+        new ApiScope[] { Scopes.ProjectScope };
 
     public static IEnumerable<Client> Clients =>
-        new List<Client> {
-            // machine to machine client
+        new Client[] {
+            // m2m client credentials flow client
             new() {
-                ClientId = "client",
-                ClientSecrets = { new Secret("secret".Sha256()) },
+                ClientId = "m2m.client",
+                ClientName = "Client Credentials Client",
                 AllowedGrantTypes = GrantTypes.ClientCredentials,
-                // scopes that client has access to
+                ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
                 AllowedScopes = { Scopes.ProjectScope.Name }
             },
 
-            // interactive ASP.NET Core Web App
+            // interactive client using code flow + pkce
             new() {
                 ClientId = "web",
                 ClientSecrets = { new Secret("secret".Sha256()) },
                 AllowedGrantTypes = GrantTypes.Code,
-
-                // where to redirect to after login
-                RedirectUris = { "https://localhost:5002/signin-oidc" },
-
-                // where to redirect to after logout
-                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                RedirectUris = { $"{IPs.Blazor}/signin-oidc" },
+                FrontChannelLogoutUri = $"{IPs.Blazor}/signout-oidc",
+                PostLogoutRedirectUris = { $"{IPs.Blazor}/signout-callback-oidc" },
                 AllowOfflineAccess = true,
-                AllowedScopes = new List<string> {
-                    IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, Scopes.ProjectScope.Name
-                }
+                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, Scopes.ProjectScope.Name }
             }
         };
 }

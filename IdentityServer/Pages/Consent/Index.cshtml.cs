@@ -30,8 +30,7 @@ public class Index : PageModel {
 
     public ViewModel View { get; set; }
 
-    [BindProperty]
-    public InputModel Input { get; set; }
+    [BindProperty] public InputModel Input { get; set; }
 
     public async Task<IActionResult> OnGet(string returnUrl) {
         View = await BuildViewModelAsync(returnUrl);
@@ -39,9 +38,7 @@ public class Index : PageModel {
             return RedirectToPage("/Home/Error/Index");
         }
 
-        Input = new InputModel {
-            ReturnUrl = returnUrl,
-        };
+        Input = new InputModel { ReturnUrl = returnUrl, };
 
         return Page();
     }
@@ -76,7 +73,8 @@ public class Index : PageModel {
                 };
 
                 // emit event
-                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
+                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues,
+                    grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
             }
             else {
                 ModelState.AddModelError("", ConsentOptions.MustChooseOneErrorMessage);
@@ -113,6 +111,7 @@ public class Index : PageModel {
         else {
             _logger.LogError("No consent request matching request: {0}", returnUrl);
         }
+
         return null;
     }
 
@@ -139,16 +138,17 @@ public class Index : PageModel {
             if (apiScope != null) {
                 var scopeVm = CreateScopeViewModel(parsedScope, apiScope, model == null || model.ScopesConsented?.Contains(parsedScope.RawValue) == true);
                 scopeVm.Resources = apiResources.Where(x => x.Scopes.Contains(parsedScope.ParsedName))
-                    .Select(x => new ResourceViewModel {
-                        Name = x.Name,
-                        DisplayName = x.DisplayName ?? x.Name,
-                    }).ToArray();
+                    .Select(x => new ResourceViewModel { Name = x.Name, DisplayName = x.DisplayName ?? x.Name, }).ToArray();
                 apiScopes.Add(scopeVm);
             }
         }
+
         if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess) {
-            apiScopes.Add(GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) == true));
+            apiScopes.Add(GetOfflineAccessScope(model == null ||
+                                                model.ScopesConsented?.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) ==
+                                                true));
         }
+
         vm.ApiScopes = apiScopes;
 
         return vm;

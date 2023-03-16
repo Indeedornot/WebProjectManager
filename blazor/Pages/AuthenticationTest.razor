@@ -1,0 +1,14 @@
+﻿@page "/AuthenticationTest"
+@attribute [Authorize]
+
+@inject HttpClient httpClient
+
+<h3>AuthenticationTest</h3>
+<p>@Hi</p>
+
+@code {
+
+    public string? Hi { get; set; }
+
+
+}

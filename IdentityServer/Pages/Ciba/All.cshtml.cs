@@ -17,10 +17,8 @@ namespace IdentityServer.Pages.Ciba;
 public class AllModel : PageModel {
     public IEnumerable<BackchannelUserLoginRequest> Logins { get; set; }
 
-    [BindProperty, Required]
-    public string Id { get; set; }
-    [BindProperty, Required]
-    public string Button { get; set; }
+    [BindProperty, Required] public string Id { get; set; }
+    [BindProperty, Required] public string Button { get; set; }
 
     private readonly IBackchannelAuthenticationInteractionService _backchannelAuthenticationInteraction;
 

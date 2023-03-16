@@ -56,14 +56,10 @@ public class Index : PageModel {
             }
         }
 
-        View = new ViewModel {
-            Grants = list
-        };
+        View = new ViewModel { Grants = list };
     }
 
-    [BindProperty]
-    [Required]
-    public string ClientId { get; set; }
+    [BindProperty][Required] public string ClientId { get; set; }
 
     public async Task<IActionResult> OnPost() {
         await _interaction.RevokeUserConsentAsync(ClientId);

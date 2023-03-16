@@ -3,8 +3,7 @@
 @{
 }
 
-@if (Model.Input.UserCode == null)
-{
+@if (Model.Input.UserCode == null) {
     @*We need to collect the user code*@
     <div class="page-device-code">
         <div class="lead">
@@ -14,7 +13,7 @@
 
         <div class="row">
             <div class="col-sm-8">
-                <partial name="_ValidationSummary" />
+                <partial name="_ValidationSummary"/>
             </div>
         </div>
 
@@ -23,7 +22,7 @@
                 <form asp-page="/Device/Index" method="get">
                     <div class="form-group">
                         <label for="userCode">User Code:</label>
-                        <input class="form-control" for="userCode" name="userCode" autofocus />
+                        <input class="form-control" for="userCode" name="userCode" autofocus/>
                     </div>
 
                     <button class="btn btn-primary" name="button">Submit</button>
@@ -31,15 +30,14 @@
             </div>
         </div>
     </div>
-}
-else
-{
+} else {
     @*collect consent for the user code provided*@
     <div class="page-device-confirmation">
         <div class="lead">
-            @if (Model.View.ClientLogoUrl != null)
-            {
-                <div class="client-logo"><img src="@Model.View.ClientLogoUrl"></div>
+            @if (Model.View.ClientLogoUrl != null) {
+                <div class="client-logo">
+                    <img src="@Model.View.ClientLogoUrl">
+                </div>
             }
             <h1>
                 @Model.View.ClientName
@@ -51,16 +49,15 @@ else
 
         <div class="row">
             <div class="col-sm-8">
-                <partial name="_ValidationSummary" />
+                <partial name="_ValidationSummary"/>
             </div>
         </div>
 
         <form asp-page="/Device/Index">
-            <input asp-for="Input.UserCode" type="hidden" />
+            <input asp-for="Input.UserCode" type="hidden"/>
             <div class="row">
                 <div class="col-sm-8">
-                    @if (Model.View.IdentityScopes.Any())
-                    {
+                    @if (Model.View.IdentityScopes.Any()) {
                         <div class="form-group">
                             <div class="card">
                                 <div class="card-header">
@@ -68,17 +65,15 @@ else
                                     Personal Information
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    @foreach (var scope in Model.View.IdentityScopes)
-                                    {
-                                        <partial name="_ScopeListItem" model="@scope" />
+                                    @foreach (var scope in Model.View.IdentityScopes) {
+                                        <partial name="_ScopeListItem" model="@scope"/>
                                     }
                                 </ul>
                             </div>
                         </div>
                     }
 
-                    @if (Model.View.ApiScopes.Any())
-                    {
+                    @if (Model.View.ApiScopes.Any()) {
                         <div class="form-group">
                             <div class="card">
                                 <div class="card-header">
@@ -86,9 +81,8 @@ else
                                     Application Access
                                 </div>
                                 <ul class="list-group list-group-flush">
-                                    @foreach (var scope in Model.View.ApiScopes)
-                                    {
-                                        <partial name="_ScopeListItem" model="scope" />
+                                    @foreach (var scope in Model.View.ApiScopes) {
+                                        <partial name="_ScopeListItem" model="scope"/>
                                     }
                                 </ul>
                             </div>
@@ -107,8 +101,7 @@ else
                         </div>
                     </div>
 
-                    @if (Model.View.AllowRememberConsent)
-                    {
+                    @if (Model.View.AllowRememberConsent) {
                         <div class="form-group">
                             <div class="form-check">
                                 <input class="form-check-input" asp-for="Input.RememberConsent">
@@ -127,8 +120,7 @@ else
                     <button name="Input.button" value="no" class="btn btn-secondary">No, Do Not Allow</button>
                 </div>
                 <div class="col-sm-4 col-lg-auto">
-                    @if (Model.View.ClientUrl != null)
-                    {
+                    @if (Model.View.ClientUrl != null) {
                         <a class="btn btn-outline-info" href="@Model.View.ClientUrl">
                             <span class="glyphicon glyphicon-info-sign"></span>
                             <strong>@Model.View.ClientName</strong>

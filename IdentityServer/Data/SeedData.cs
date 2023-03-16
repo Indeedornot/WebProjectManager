@@ -1,69 +1,46 @@
-﻿using Duende.IdentityServer.EntityFramework.DbContexts;
-using Duende.IdentityServer.EntityFramework.Mappers;
-using Duende.IdentityServer.Models;
+﻿using IdentityModel;
 
+using IdentityServer.Models;
+
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using Serilog;
 
-namespace IdentityServer;
+using System.Security.Claims;
 
-public class SeedData {
+namespace IdentityServer.Data;
+
+public static class SeedData {
     public static void EnsureSeedData(WebApplication app) {
         using IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
-        scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
-
-        ConfigurationDbContext context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+        ApplicationDbContext context = scope.ServiceProvider.GetService<ApplicationDbContext>();
         context.Database.Migrate();
-        EnsureSeedData(context);
-    }
 
-    private static void EnsureSeedData(ConfigurationDbContext context) {
-        if (!context.Clients.Any()) {
-            Log.Debug("Clients being populated");
-            foreach (Client client in Config.Clients.ToList()) {
-                context.Clients.Add(client.ToEntity());
+        UserManager<ApplicationUser> userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        foreach (TestUsers.TestUser testUser in TestUsers.Users) {
+            ApplicationUser user = userMgr.FindByNameAsync(testUser.User.UserName).Result;
+            if (user != null) {
+                Log.Debug($"{testUser.User.UserName} already exists");
+                continue;
             }
 
-            context.SaveChanges();
-        }
-        else {
-            Log.Debug("Clients already populated");
-        }
-
-        if (!context.IdentityResources.Any()) {
-            Log.Debug("IdentityResources being populated");
-            foreach (IdentityResource resource in Config.IdentityResources.ToList()) {
-                context.IdentityResources.Add(resource.ToEntity());
+            IdentityResult result = userMgr.CreateAsync(testUser.User, testUser.Password).Result;
+            if (!result.Succeeded) {
+                throw new Exception(result.Errors.First().Description);
             }
 
-            context.SaveChanges();
-        }
-        else {
-            Log.Debug("IdentityResources already populated");
-        }
+            result = userMgr.AddClaimsAsync(testUser.User,
+                new Claim[] {
+                    new(JwtClaimTypes.Name, "Alice Smith"), new(JwtClaimTypes.GivenName, "Alice"), new(JwtClaimTypes.FamilyName, "Smith"),
+                    new(JwtClaimTypes.WebSite, "http://alice.com")
+                }).Result;
 
-        if (!context.ApiScopes.Any()) {
-            Log.Debug("ApiScopes being populated");
-            foreach (ApiScope resource in Config.ApiScopes.ToList()) {
-                context.ApiScopes.Add(resource.ToEntity());
+            if (!result.Succeeded) {
+                throw new Exception(result.Errors.First().Description);
             }
 
-            context.SaveChanges();
-        }
-        else {
-            Log.Debug("ApiScopes already populated");
-        }
-
-        if (!context.IdentityProviders.Any()) {
-            Log.Debug("OIDC IdentityProviders being populated");
-            context.IdentityProviders.Add(new OidcProvider {
-                Scheme = "demoidsrv", DisplayName = "IdentityServer", Authority = "https://demo.duendesoftware.com", ClientId = "login"
-            }.ToEntity());
-            context.SaveChanges();
-        }
-        else {
-            Log.Debug("OIDC IdentityProviders already populated");
+            Log.Debug($"{testUser.User.UserName} created");
         }
     }
 }

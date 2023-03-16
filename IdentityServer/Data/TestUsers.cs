@@ -1,52 +1,34 @@
-// Copyright (c) Duende Software. All rights reserved.
-// See LICENSE in the project root for license information.
+﻿using IdentityModel;
 
-
-using Duende.IdentityServer;
-using Duende.IdentityServer.Test;
-
-using IdentityModel;
+using IdentityServer.Models;
 
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace IdentityServer.Data;
 
 public static class TestUsers {
-    public static List<TestUser> Users {
-        get {
-            var address = new { street_address = "One Hacker Way", locality = "Heidelberg", postal_code = 69118, country = "Germany" };
-
-            return new List<TestUser> {
-                new() {
-                    SubjectId = "1",
-                    Username = "alice",
-                    Password = "alice",
-                    Claims = {
-                        new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                        new Claim(JwtClaimTypes.GivenName, "Alice"),
-                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
-                        new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                        new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                        new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
-                    }
-                },
-                new() {
-                    SubjectId = "2",
-                    Username = "bob",
-                    Password = "bob",
-                    Claims = {
-                        new Claim(JwtClaimTypes.Name, "Bob Smith"),
-                        new Claim(JwtClaimTypes.GivenName, "Bob"),
-                        new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                        new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
-                        new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                        new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                        new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
-                    }
-                }
-            };
-        }
+    public class TestUser {
+        public ApplicationUser User;
+        public string Password;
+        public Claim[] Claims;
     }
+
+    public static IEnumerable<TestUser> Users => new List<TestUser> {
+        new() {
+            User = new ApplicationUser() { UserName = "alice", Email = "AliceSmith@email.com", EmailConfirmed = true },
+            Claims = new Claim[] {
+                new(JwtClaimTypes.Name, "Alice Smith"), new(JwtClaimTypes.GivenName, "Alice"), new(JwtClaimTypes.FamilyName, "Smith"),
+                new(JwtClaimTypes.WebSite, "http://alice.com")
+            },
+            Password = "Pass123$"
+        },
+        new() {
+            User = new ApplicationUser() { UserName = "bob", Email = "BobSmith@email.com", EmailConfirmed = true },
+            Claims = new Claim[] {
+                new(JwtClaimTypes.Name, "Bob Smith"), new(JwtClaimTypes.GivenName, "Bob"), new(JwtClaimTypes.FamilyName, "Smith"),
+                new(JwtClaimTypes.WebSite, "http://bob.com"), new("location", "somewhere")
+            },
+            Password = "Pass123$"
+        }
+    };
 }

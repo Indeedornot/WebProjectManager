@@ -1,9 +1,6 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
-using Microsoft.EntityFrameworkCore;
+using blazor;
+
+using Microsoft.IdentityModel.Logging;
 
 using Tailwind;
 
@@ -13,11 +10,16 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+builder.Services.AddConfiguredIdentityServer();
+
+builder.Services.AddHttpContextAccessor();
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment()) {
     app.RunTailwind("build", "./");
+    IdentityModelEventSource.ShowPII = true;
 }
 else {
     app.RunTailwind("release", "./");
@@ -26,13 +28,17 @@ else {
     app.UseHsts();
 }
 
+app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.None, Secure = CookieSecurePolicy.Always });
+
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseBff(); //Identity Server
 app.UseAuthorization();
+
+app.MapBffManagementEndpoints();
 
 app.MapControllers();
 app.MapBlazorHub();

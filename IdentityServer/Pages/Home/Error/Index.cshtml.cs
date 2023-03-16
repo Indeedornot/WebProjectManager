@@ -1,9 +1,12 @@
+using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
+
+using IdentityServer.Pages.Error;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.Pages.Error;
+namespace IdentityServer.Pages.Home.Error;
 
 [AllowAnonymous]
 [SecurityHeaders]
@@ -22,7 +25,7 @@ public class Index : PageModel {
         View = new ViewModel();
 
         // retrieve error details from identityserver
-        var message = await _interaction.GetErrorContextAsync(errorId);
+        ErrorMessage message = await _interaction.GetErrorContextAsync(errorId);
         if (message != null) {
             View.Error = message;
 

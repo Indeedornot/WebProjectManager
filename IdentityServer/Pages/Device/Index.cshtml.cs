@@ -35,8 +35,7 @@ public class Index : PageModel {
 
     public ViewModel View { get; set; }
 
-    [BindProperty]
-    public InputModel Input { get; set; }
+    [BindProperty] public InputModel Input { get; set; }
 
     public async Task<IActionResult> OnGet(string userCode) {
         if (String.IsNullOrWhiteSpace(userCode)) {
@@ -53,9 +52,7 @@ public class Index : PageModel {
             return Page();
         }
 
-        Input = new InputModel {
-            UserCode = userCode,
-        };
+        Input = new InputModel { UserCode = userCode, };
 
         return Page();
     }
@@ -68,9 +65,7 @@ public class Index : PageModel {
 
         // user clicked 'no' - send back the standard 'access_denied' response
         if (Input.Button == "no") {
-            grantedConsent = new ConsentResponse {
-                Error = AuthorizationError.AccessDenied
-            };
+            grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
             // emit event
             await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
@@ -91,7 +86,8 @@ public class Index : PageModel {
                 };
 
                 // emit event
-                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
+                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues,
+                    grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
             }
             else {
                 ModelState.AddModelError("", ConsentOptions.MustChooseOneErrorMessage);
@@ -132,7 +128,8 @@ public class Index : PageModel {
             AllowRememberConsent = request.Client.AllowRememberConsent
         };
 
-        vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources.Select(x => CreateScopeViewModel(x, model == null || model.ScopesConsented?.Contains(x.Name) == true)).ToArray();
+        vm.IdentityScopes = request.ValidatedResources.Resources.IdentityResources
+            .Select(x => CreateScopeViewModel(x, model == null || model.ScopesConsented?.Contains(x.Name) == true)).ToArray();
 
         var apiScopes = new List<ScopeViewModel>();
         foreach (var parsedScope in request.ValidatedResources.ParsedScopes) {
@@ -142,9 +139,13 @@ public class Index : PageModel {
                 apiScopes.Add(scopeVm);
             }
         }
+
         if (DeviceOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess) {
-            apiScopes.Add(GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) == true));
+            apiScopes.Add(GetOfflineAccessScope(model == null ||
+                                                model.ScopesConsented?.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) ==
+                                                true));
         }
+
         vm.ApiScopes = apiScopes;
 
         return vm;

@@ -1,0 +1,12 @@
+﻿<AuthorizeView>
+    <Authorized>
+        <NavLink href="@context.User.FindFirst("bff:logout_url")?.Value">Log Out</NavLink>
+    </Authorized>
+    <NotAuthorized>
+        <a href="bff/login">Log In</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+}
