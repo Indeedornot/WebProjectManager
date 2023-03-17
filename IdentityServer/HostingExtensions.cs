@@ -1,5 +1,6 @@
 using Duende.IdentityServer;
 
+using IdentityServer.CustomValidation;
 using IdentityServer.Data;
 using IdentityServer.Models;
 
@@ -7,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using Serilog;
+
+using shared.Common;
 
 namespace IdentityServer;
 
@@ -21,7 +24,7 @@ internal static class HostingExtensions {
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        builder.Services
+        IIdentityServerBuilder isBuilder = builder.Services
             .AddIdentityServer(options => {
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
@@ -36,16 +39,30 @@ internal static class HostingExtensions {
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<ApplicationUser>();
 
-        builder.Services.AddAuthentication()
-            .AddGoogle(options => {
-                options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        isBuilder.AddExtensionGrantValidator<CustomGrantValidators.TokenExchangeGrantValidator>();
+        isBuilder.AddProfileService<ProfileService>();
 
-                // register your IdentityServer with Google at https://console.developers.google.com
-                // enable the Google+ API
-                // set the redirect URI to https://localhost:5001/signin-google
-                options.ClientId = "copy client ID from Google here";
-                options.ClientSecret = "copy client secret from Google here";
+        isBuilder.Services.AddAuthentication()
+            .AddLocalApi(options => {
+                options.ExpectedScope = Scopes.UserDataScope.Name;
             });
+
+        isBuilder.Services.AddAuthorization(options => {
+            options.AddPolicy(Scopes.UserDataPolicyName, policy => {
+                policy.AddAuthenticationSchemes(IdentityServerConstants.LocalApi.AuthenticationScheme);
+                policy.RequireAuthenticatedUser();
+            });
+        });
+
+        // .AddGoogle(options => {
+        //     options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+        //
+        //     // register your IdentityServer with Google at https://console.developers.google.com
+        //     // enable the Google+ API
+        //     // set the redirect URI to https://localhost:5001/signin-google
+        //     options.ClientId = "copy client ID from Google here";
+        //     options.ClientSecret = "copy client secret from Google here";
+        // });
 
         return builder.Build();
     }
@@ -62,6 +79,7 @@ internal static class HostingExtensions {
         app.UseIdentityServer();
         app.UseAuthorization();
 
+        app.MapControllers();
         app.MapRazorPages()
             .RequireAuthorization();
 

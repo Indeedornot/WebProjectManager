@@ -1,3 +1,4 @@
+using api.Api;
 using api.Database;
 
 using IdentityModel;
@@ -12,8 +13,15 @@ WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-
 builder.Services.AddDbContext<DataContext>();
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddTransient<HeaderHandler>();
+builder.Services.AddHttpClient<UserClient>()
+    .ConfigureHttpClient((opt) => {
+        opt.BaseAddress = new Uri(IPs.IdentityServer);
+    }).AddHttpMessageHandler<HeaderHandler>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

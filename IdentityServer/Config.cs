@@ -1,6 +1,8 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 
+using IdentityModel;
+
 using shared.Common;
 
 namespace IdentityServer;
@@ -10,17 +12,16 @@ public static class Config {
         new IdentityResource[] { new IdentityResources.OpenId(), new IdentityResources.Profile() };
 
     public static IEnumerable<ApiScope> ApiScopes =>
-        new ApiScope[] { Scopes.ProjectScope };
+        new ApiScope[] { Scopes.ProjectScope, Scopes.UserDataScope };
 
     public static IEnumerable<Client> Clients =>
         new Client[] {
             // m2m client credentials flow client
             new() {
-                ClientId = "m2m.client",
-                ClientName = "Client Credentials Client",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("511536EF-F270-4058-80CA-1C89C192F69A".Sha256()) },
-                AllowedScopes = { Scopes.ProjectScope.Name }
+                ClientId = "api",
+                ClientSecrets = { new Secret("secret".Sha256()) },
+                AllowedGrantTypes = { OidcConstants.GrantTypes.TokenExchange },
+                AllowedScopes = { Scopes.UserDataScope.Name }
             },
 
             // interactive client using code flow + pkce
