@@ -1,10 +1,10 @@
-@page
-@model IdentityServer.Pages.Account.Login.Index
+﻿@page
+@model IdentityServer.Pages.Account.Register.Index
 
 <div class="login-page">
     <div class="lead">
-        <h1>Login</h1>
-        <p>Choose how to login</p>
+        <h1>Register</h1>
+        <p>Choose how to register</p>
     </div>
 
     <partial name="_ValidationSummary"/>
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form asp-page="/Account/Login/Index">
+                        <form asp-page="/Account/Register/Index">
                             <input type="hidden" asp-for="Input.ReturnUrl"/>
 
                             <div class="form-group">
@@ -44,11 +44,11 @@
 
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <button class="btn btn-primary" name="Input.Button" value="login">Login</button>
+                                    <button class="btn btn-primary" name="Input.Button" value="register">Register</button>
                                     <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
                                 </div>
 
-                                <button class="btn btn-secondary" name="Input.Button" value="register">Register</button>
+                                <button class="btn btn-secondary" name="Input.Button" value="signin">Sign In</button>
                             </div>
                         </form>
                     </div>

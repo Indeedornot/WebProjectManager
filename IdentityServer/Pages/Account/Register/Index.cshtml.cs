@@ -1,4 +1,4 @@
-using Duende.IdentityServer.Events;
+﻿using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
-namespace IdentityServer.Pages.Account.Login;
+namespace IdentityServer.Pages.Account.Register;
 
 [SecurityHeaders]
 [AllowAnonymous]
@@ -60,13 +60,12 @@ public class Index : PageModel {
         AuthorizationRequest context = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
 
         // the user clicked the "cancel" button
-        if (Input.Button != "login") {
-            if (Input.Button == "register") {
-                return RedirectToPage("/Account/Register/Index", new { returnUrl = Input.ReturnUrl });
+        if (Input.Button != "register") {
+            if (Input.Button == "signin") {
+                return RedirectToPage("/Account/Login/Index", new { returnUrl = Input.ReturnUrl });
             }
 
             if (context == null) {
-                // since we don't have a valid context, then we just go back to the home page
                 return Redirect("~/");
             }
 
@@ -83,26 +82,29 @@ public class Index : PageModel {
             }
 
             return Redirect(Input.ReturnUrl);
+
+            // since we don't have a valid context, then we just go back to the home page
         }
 
         if (!ModelState.IsValid) {
-            await BuildModelAsync(Input.ReturnUrl);
-            return Page();
-        }
-
-        // something went wrong, show form with error
-        SignInResult result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberLogin, true);
-        if (!result.Succeeded) {
-            await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, "invalid credentials", clientId: context?.Client.ClientId));
-            ModelState.AddModelError(string.Empty, LoginOptions.InvalidCredentialsErrorMessage);
-
             // something went wrong, show form with error
             await BuildModelAsync(Input.ReturnUrl);
             return Page();
         }
 
-        ApplicationUser user = await _userManager.FindByNameAsync(Input.Username);
-        await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
+        ApplicationUser newUser = new() { UserName = Input.Username };
+        IdentityResult result = await _userManager.CreateAsync(newUser, Input.Password);
+        if (!result.Succeeded) {
+            await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, RegisterOptions.UserAlreadyExistsErrorMessage,
+                clientId: context?.Client.ClientId));
+            ModelState.AddModelError(string.Empty, RegisterOptions.UserAlreadyExistsErrorMessage);
+
+            await BuildModelAsync(Input.ReturnUrl);
+            return Page();
+        }
+
+        await _events.RaiseAsync(new UserLoginSuccessEvent(newUser.UserName, newUser.Id, newUser.UserName, clientId: context?.Client.ClientId));
+        await _signInManager.SignInAsync(newUser, RegisterOptions.AllowRememberLogin && Input.RememberLogin);
 
         if (context == null) {
             if (Url.IsLocalUrl(Input.ReturnUrl)) {
@@ -169,8 +171,8 @@ public class Index : PageModel {
         }
 
         View = new ViewModel {
-            AllowRememberLogin = LoginOptions.AllowRememberLogin,
-            EnableLocalLogin = allowLocal && LoginOptions.AllowLocalLogin,
+            AllowRememberLogin = RegisterOptions.AllowRememberLogin,
+            EnableLocalLogin = allowLocal && RegisterOptions.AllowLocalLogin,
             ExternalProviders = providers.ToArray()
         };
     }

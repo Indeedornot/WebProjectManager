@@ -1,7 +1,10 @@
 using Duende.IdentityServer;
+using Duende.IdentityServer.ResponseHandling;
+using Duende.IdentityServer.Validation;
 
-using IdentityServer.CustomValidation;
 using IdentityServer.Data;
+using IdentityServer.Extensions.CustomAuthorizeInteraction;
+using IdentityServer.Extensions.CustomValidation;
 using IdentityServer.Models;
 
 using Microsoft.AspNetCore.Identity;
@@ -38,6 +41,9 @@ internal static class HostingExtensions {
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryClients(Config.Clients)
             .AddAspNetIdentity<ApplicationUser>();
+
+        builder.Services.AddScoped<IAuthorizeInteractionResponseGenerator, CreateAuthorizeInteractionResponseGenerator>();
+        builder.Services.AddScoped<ICustomAuthorizeRequestValidator, CreateCustomAuthorizeRequestValidator>();
 
         isBuilder.AddExtensionGrantValidator<CustomGrantValidators.TokenExchangeGrantValidator>();
         isBuilder.AddProfileService<ProfileService>();
