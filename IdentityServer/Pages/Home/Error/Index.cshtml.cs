@@ -1,8 +1,6 @@
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 
-using IdentityServer.Pages.Error;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

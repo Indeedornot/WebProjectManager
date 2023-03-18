@@ -1,4 +1,4 @@
-namespace IdentityServer.Pages.Logout;
+namespace IdentityServer.Pages.Account.Logout;
 
 public class LogoutOptions {
     public static bool ShowLogoutPrompt = true;

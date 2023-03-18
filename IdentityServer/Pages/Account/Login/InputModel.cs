@@ -4,7 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace IdentityServer.Pages.Login;
+namespace IdentityServer.Pages.Account.Login;
 
 public class InputModel {
     [Required] public string Username { get; set; }

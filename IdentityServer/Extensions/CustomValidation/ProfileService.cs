@@ -6,7 +6,7 @@ using IdentityModel;
 
 using System.Security.Claims;
 
-namespace IdentityServer.CustomValidation;
+namespace IdentityServer.Extensions.CustomValidation;
 
 public class ProfileService : IProfileService {
     public Task GetProfileDataAsync(ProfileDataRequestContext context) {

@@ -11,7 +11,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace IdentityServer.Pages.Login;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+
+namespace IdentityServer.Pages.Account.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
@@ -55,7 +57,7 @@ public class Index : PageModel {
 
     public async Task<IActionResult> OnPost() {
         // check if we are in the context of an authorization request
-        var context = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
+        AuthorizationRequest context = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
 
         // the user clicked the "cancel" button
         if (Input.Button != "login") {
@@ -81,9 +83,9 @@ public class Index : PageModel {
         }
 
         if (ModelState.IsValid) {
-            var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberLogin, lockoutOnFailure: true);
+            SignInResult result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberLogin, true);
             if (result.Succeeded) {
-                var user = await _userManager.FindByNameAsync(Input.Username);
+                ApplicationUser user = await _userManager.FindByNameAsync(Input.Username);
                 await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Id, user.UserName, clientId: context?.Client.ClientId));
 
                 if (context != null) {
@@ -122,12 +124,12 @@ public class Index : PageModel {
     private async Task BuildModelAsync(string returnUrl) {
         Input = new InputModel { ReturnUrl = returnUrl };
 
-        var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
+        AuthorizationRequest context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null) {
-            var local = context.IdP == Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider;
+            bool local = context.IdP == Duende.IdentityServer.IdentityServerConstants.LocalIdentityProvider;
 
             // this is meant to short circuit the UI and only trigger the one external IdP
-            View = new ViewModel { EnableLocalLogin = local, };
+            View = new ViewModel { EnableLocalLogin = local };
 
             Input.Username = context?.LoginHint;
 
@@ -138,20 +140,20 @@ public class Index : PageModel {
             return;
         }
 
-        var schemes = await _schemeProvider.GetAllSchemesAsync();
+        IEnumerable<AuthenticationScheme> schemes = await _schemeProvider.GetAllSchemesAsync();
 
         var providers = schemes
             .Where(x => x.DisplayName != null)
             .Select(x => new ViewModel.ExternalProvider { DisplayName = x.DisplayName ?? x.Name, AuthenticationScheme = x.Name }).ToList();
 
-        var dyanmicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
+        IEnumerable<ViewModel.ExternalProvider> dyanmicSchemes = (await _identityProviderStore.GetAllSchemeNamesAsync())
             .Where(x => x.Enabled)
             .Select(x => new ViewModel.ExternalProvider { AuthenticationScheme = x.Scheme, DisplayName = x.DisplayName });
         providers.AddRange(dyanmicSchemes);
 
 
-        var allowLocal = true;
-        var client = context?.Client;
+        bool allowLocal = true;
+        Client client = context?.Client;
         if (client != null) {
             allowLocal = client.EnableLocalLogin;
             if (client.IdentityProviderRestrictions != null && client.IdentityProviderRestrictions.Any()) {

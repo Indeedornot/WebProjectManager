@@ -7,7 +7,7 @@ using IdentityModel;
 using System.Security.Claims;
 using System.Text.Json;
 
-namespace IdentityServer.CustomValidation;
+namespace IdentityServer.Extensions.CustomValidation;
 
 public class CustomGrantValidators {
     public class TokenExchangeGrantValidator : IExtensionGrantValidator {

@@ -2,7 +2,7 @@
 // See LICENSE in the project root for license information.
 
 
-namespace IdentityServer.Pages.Logout;
+namespace IdentityServer.Pages.Account.Logout;
 
 public class LoggedOutViewModel {
     public string PostLogoutRedirectUri { get; set; }
