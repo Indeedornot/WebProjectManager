@@ -16,6 +16,6 @@ public class Project : BaseEntity {
 }
 
 public class ProjectUser : BaseEntity {
-    public int ProjectId { get; set; }
+    public IEnumerable<Project> Projects { get; set; }
     public int UserId { get; set; }
 }

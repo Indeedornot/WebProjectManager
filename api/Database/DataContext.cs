@@ -24,12 +24,12 @@ public class DataContext : DbContext {
 
     public DbSet<Project> Projects { get; set; }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<ProjectUser> Users { get; set; }
 
-    protected override void OnModelCreating(ModelBuilder builder) {
-        builder.Entity<User>()
-            .HasMany(u => u.Projects)
-            .WithMany(p => p.Assignees)
+    protected override void OnModelCreating(ModelBuilder modelBuilder) {
+        modelBuilder.Entity<Project>()
+            .HasMany(u => u.Assignees)
+            .WithMany(p => p.Projects)
             .UsingEntity(j => j.ToTable("UserProject"));
     }
 
