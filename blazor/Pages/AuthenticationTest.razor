@@ -1,17 +1,72 @@
 ﻿@page "/AuthenticationTest"
-@using blazor.Api
+
 @attribute [Authorize]
+@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@using blazor.Api
 @inject IWebApi webApi
 
-<h3>AuthenticationTest</h3>
-<p>@Hi</p>
+
+<div class="ml-4">
+    <h1>Principal Data</h1>
+    <div class="ml-4">
+        <h2>Api Answer:</h2>
+        <p class="ml-4">@ApiResponse</p>
+    </div>
+
+
+    <div class="ml-4">
+        <h2>Claims</h2>
+
+        <dl class="ml-4">
+            @foreach (var claim in User.Claims) {
+                <dt>@claim.Type</dt>
+                <dd class="ml-4">@claim.Value</dd>
+            }
+        </dl>
+    </div>
+
+    <div class="ml-4">
+        <h2>Properties</h2>
+
+        @* <dl> *@
+        @*     @foreach (var prop in (await HttpContext.AuthenticateAsync()).Properties.Items) { *@
+        @*         <dt>@prop.Key</dt> *@
+        @*         <dd>@prop.Value</dd> *@
+        @*     } *@
+        @* </dl> *@
+    </div>
+</div>
+
 
 @code {
-
-    public string? Hi { get; set; }
+    private ClaimsPrincipal User { get; set; }
+    private string? ApiResponse { get; set; }
 
     protected override async Task OnInitializedAsync() {
-        Hi = await webApi.Hello();
+        await GetClaimsPrincipalData();
+        await GetApiResponse();
+    }
+
+    private async Task GetApiResponse() {
+        try {
+            ApiResponse = await webApi.Hello();
+        }
+        catch (Exception e) {
+            ApiResponse = e.Message;
+        }
+    }
+
+    private async Task GetClaimsPrincipalData() {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity is null || !user.Identity.IsAuthenticated) {
+            throw new Exception("User is not authenticated");
+        }
+
+        User = user;
     }
 
 }
