@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace shared.Models;
 
-public class Entities : BaseEntity {
+public class Project : BaseEntity {
     //here projects means a task, with an assignee, a due date, and a status
     public int Id { get; set; }
     public string Name { get; set; }
