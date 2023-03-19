@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace api.Database;
+
 public class DataContext : DbContext {
     protected readonly IConfiguration Configuration;
 
@@ -21,7 +22,7 @@ public class DataContext : DbContext {
         options.UseSqlite(Configuration.GetConnectionString("ProjectDatabase"));
     }
 
-    public DbSet<Project> Projects { get; set; }
+    public DbSet<Entities> Projects { get; set; }
 
     public DbSet<User> Users { get; set; }
 
@@ -46,13 +47,14 @@ public class DataContext : DbContext {
         IEnumerable<EntityEntry> entities = ChangeTracker.Entries()
             .Where(x => x.Entity is BaseEntity && (x.State == EntityState.Added || x.State == EntityState.Modified));
 
-        foreach (var entity in entities) {
-            var now = DateTime.UtcNow; // current datetime
+        foreach (EntityEntry? entity in entities) {
+            DateTime now = DateTime.UtcNow; // current datetime
             var baseEntity = (BaseEntity)entity.Entity;
 
             if (entity.State == EntityState.Added) {
                 baseEntity.CreatedAt = now;
             }
+
             baseEntity.UpdatedAt = now;
         }
     }
