@@ -15,6 +15,7 @@ public static class SeedData {
     public static void EnsureSeedData(WebApplication app) {
         using IServiceScope scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         ApplicationDbContext context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+        context.Database.EnsureDeleted();
         context.Database.Migrate();
 
         UserManager<ApplicationUser> userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();

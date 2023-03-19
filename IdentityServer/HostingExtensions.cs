@@ -46,7 +46,7 @@ internal static class HostingExtensions {
         builder.Services.AddScoped<ICustomAuthorizeRequestValidator, CreateCustomAuthorizeRequestValidator>();
 
         isBuilder.AddExtensionGrantValidator<CustomGrantValidators.TokenExchangeGrantValidator>();
-        isBuilder.AddProfileService<ProfileService>();
+        isBuilder.AddProfileService<CustomProfileService>();
 
         isBuilder.Services.AddAuthentication()
             .AddLocalApi(options => {

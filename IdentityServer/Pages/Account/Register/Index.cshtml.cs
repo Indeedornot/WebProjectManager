@@ -29,6 +29,8 @@ public class Index : PageModel {
 
     [BindProperty] public InputModel Input { get; set; }
 
+    public AvatarHelper Avatar { get; set; } = new();
+
     public Index(
         IIdentityServerInteractionService interaction,
         IAuthenticationSchemeProvider schemeProvider,
@@ -92,7 +94,7 @@ public class Index : PageModel {
             return Page();
         }
 
-        ApplicationUser newUser = new() { UserName = Input.Username };
+        ApplicationUser newUser = new() { UserName = Input.Username, Avatar = Input.Avatar };
         IdentityResult result = await _userManager.CreateAsync(newUser, Input.Password);
         if (!result.Succeeded) {
             await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, RegisterOptions.UserAlreadyExistsErrorMessage,

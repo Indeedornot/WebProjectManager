@@ -5,11 +5,14 @@ using IdentityModel;
 
 using shared.Common;
 
+using IdentityResources = Duende.IdentityServer.Models.IdentityResources;
+using SharedIdentityResources = shared.Common.IdentityResources;
+
 namespace IdentityServer;
 
 public static class Config {
     public static IEnumerable<IdentityResource> IdentityResources =>
-        new IdentityResource[] { new IdentityResources.OpenId(), new IdentityResources.Profile() };
+        new IdentityResource[] { new IdentityResources.OpenId(), new IdentityResources.Profile(), SharedIdentityResources.Avatar };
 
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[] { Scopes.ProjectScope, Scopes.UserDataScope };
@@ -33,7 +36,12 @@ public static class Config {
                 FrontChannelLogoutUri = $"{IPs.Blazor}/signout-oidc",
                 PostLogoutRedirectUris = { $"{IPs.Blazor}/signout-callback-oidc" },
                 AllowOfflineAccess = true,
-                AllowedScopes = { IdentityServerConstants.StandardScopes.OpenId, IdentityServerConstants.StandardScopes.Profile, Scopes.ProjectScope.Name }
+                AllowedScopes = {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    Scopes.ProjectScope.Name,
+                    SharedIdentityResources.Avatar.Name
+                }
             }
         };
 }

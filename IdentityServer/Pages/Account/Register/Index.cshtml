@@ -1,4 +1,5 @@
 ﻿@page
+@using IdentityServer.Pages.Account.Register
 @model IdentityServer.Pages.Account.Register.Index
 
 <div class="login-page">
@@ -19,8 +20,21 @@
                     </div>
 
                     <div class="card-body">
+                        <div class="d-flex justify-content-center border-0">
+                            <button class="p-0 img-thumbnail">
+                                <img src="@Model.Avatar.AvatarUrl" width="48" height="48"/>
+                            </button>
+
+                        </div>
+
                         <form asp-page="/Account/Register/Index">
                             <input type="hidden" asp-for="Input.ReturnUrl"/>
+                            <input type="hidden" asp-for="Input.Avatar" value="@Model.Avatar.AvatarUrl"/>
+
+                            <div class="form-group">
+                                <label></label>
+                                <input class="form-control" placeholder="Avatar" value="@Model.Avatar.AvatarInput">
+                            </div>
 
                             <div class="form-group">
                                 <label asp-for="Input.Username"></label>
