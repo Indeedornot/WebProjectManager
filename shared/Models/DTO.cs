@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace shared.Models;
 
-public class ProjectDTO : BaseEntity {
+public class ProjectDTO {
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -15,9 +15,15 @@ public class ProjectDTO : BaseEntity {
 }
 
 public class UserDTO {
-    public int Id { get; set; }
+    public string Id { get; set; }
     public Uri Avatar { get; set; }
     public string Name { get; set; }
 
     public IEnumerable<int> Projects { get; set; }
+}
+
+public class ApplicationUserDTO {
+    public string Id { get; set; }
+    public string Name { get; set; }
+    public string Avatar { get; set; }
 }
