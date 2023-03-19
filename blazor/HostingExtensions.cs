@@ -1,5 +1,7 @@
 ﻿using Duende.IdentityServer;
 
+using Microsoft.AspNetCore.Authentication;
+
 using shared.Common;
 
 namespace blazor;
@@ -33,6 +35,9 @@ public static class HostingExtensions {
                     options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
                     options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
                     options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
+
+                    options.Scope.Add(IdentityResources.Avatar.Name);
+                    options.ClaimActions.MapJsonKey(Claims.AvatarClaim, Claims.AvatarClaim);
 
                     options.MapInboundClaims = false;
                     options.GetClaimsFromUserInfoEndpoint = true;
