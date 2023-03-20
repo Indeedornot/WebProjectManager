@@ -10,6 +10,8 @@ using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors.Security;
 
+using Refit;
+
 using shared.Common;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
@@ -21,11 +23,12 @@ builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddTransient<HeaderHandler>();
-builder.Services.AddHttpClient<UserClient>()
+builder.Services.AddRefitClient<IUserClient>()
     .ConfigureHttpClient((opt) => {
         opt.BaseAddress = new Uri(IPs.IdentityServer);
     }).AddHttpMessageHandler<HeaderHandler>();
+
+builder.Services.AddTransient<HeaderHandler>();
 
 //Require certain token
 builder.Services.AddAuthorization(options => {
