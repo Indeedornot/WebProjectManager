@@ -26,7 +26,21 @@ public static class Config {
                 AllowedGrantTypes = { OidcConstants.GrantTypes.TokenExchange },
                 AllowedScopes = { Scopes.UserDataScope.Name }
             },
-
+            new() {
+                ClientId = "swagger",
+                ClientSecrets = { new Secret("secret".Sha256()) },
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RequireClientSecret = false,
+                AllowedScopes = {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    Scopes.ProjectScope.Name,
+                    SharedIdentityResources.Avatar.Name
+                },
+                RedirectUris = { $"{IPs.Api}/swagger/oauth2-redirect.html" },
+                AllowedCorsOrigins = { $"{IPs.Api}" }
+            },
             // interactive client using code flow + pkce
             new() {
                 ClientId = "web",

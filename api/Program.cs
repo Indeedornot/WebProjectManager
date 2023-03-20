@@ -6,6 +6,10 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
+using NSwag;
+using NSwag.AspNetCore;
+using NSwag.Generation.Processors.Security;
+
 using shared.Common;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
@@ -22,10 +26,6 @@ builder.Services.AddHttpClient<UserClient>()
     .ConfigureHttpClient((opt) => {
         opt.BaseAddress = new Uri(IPs.IdentityServer);
     }).AddHttpMessageHandler<HeaderHandler>();
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
 //Require certain token
 builder.Services.AddAuthorization(options => {
@@ -46,13 +46,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false, ValidTypes = new[] { "at+jwt" } };
         });
 
-WebApplication? app = builder.Build();
+builder.Services.AddOpenApiDocument(options => {
+    options.DocumentName = "v1";
+    options.Title = "Protected API";
+    options.Version = "v1";
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    options.AddSecurity("oauth2",
+        new OpenApiSecurityScheme {
+            Type = OpenApiSecuritySchemeType.OAuth2,
+            Flow = OpenApiOAuth2Flow.AccessCode,
+            Flows = new OpenApiOAuthFlows {
+                AuthorizationCode = new OpenApiOAuthFlow {
+                    AuthorizationUrl = $"{IPs.IdentityServer}/connect/authorize",
+                    TokenUrl = $"{IPs.IdentityServer}/connect/token",
+                    Scopes = new Dictionary<string, string> { { Scopes.ProjectScope.Name, Scopes.ProjectScope.DisplayName } }
+                }
+            }
+        });
+
+    options.OperationProcessors.Add(new OperationSecurityScopeProcessor("oauth2"));
+});
+
+WebApplication? app = builder.Build();
 
 app.UseHttpsRedirection();
 
@@ -60,6 +75,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment()) {
+    app.UseOpenApi();
+    app.UseSwaggerUi3(options => {
+        options.OAuth2Client = new OAuth2ClientSettings() { ClientId = "swagger", UsePkceWithAuthorizationCodeGrant = true };
+    });
+}
 
 app.MapControllers()
     .RequireAuthorization(Scopes.ProjectScope.Name);
