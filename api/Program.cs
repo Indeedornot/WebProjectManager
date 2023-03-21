@@ -1,8 +1,6 @@
 using api.Api;
 using api.Database;
 
-using IdentityModel;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -29,6 +27,8 @@ builder.Services.AddRefitClient<IUserClient>()
     }).AddHttpMessageHandler<HeaderHandler>();
 
 builder.Services.AddTransient<HeaderHandler>();
+
+builder.Services.AddTransient<EntityHandler>();
 
 //Require certain token
 builder.Services.AddAuthorization(options => {
