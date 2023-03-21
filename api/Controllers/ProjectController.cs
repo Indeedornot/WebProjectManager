@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using shared.Models;
 
 [ApiController]
-[Route("[controller]")]
 public class ProjectController : ControllerBase {
     private readonly IUserClient _userClient;
     private readonly DataContext _dbContext;

@@ -1,4 +1,4 @@
-﻿using api.Api;
+using api.Api;
 using api.Database;
 
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +9,6 @@ using shared.Models;
 namespace api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
 public class UserController : ControllerBase {
     private readonly IUserClient _userClient;
     private readonly DataContext _dbContext;
