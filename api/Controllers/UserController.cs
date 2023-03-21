@@ -1,4 +1,4 @@
-using api.Api;
+﻿using api.Api;
 using api.Database;
 
 using Microsoft.AspNetCore.Mvc;
@@ -49,7 +49,7 @@ public class UserController : ControllerBase {
         return await _entityHandler.GetUser(user);
     }
 
-    [HttpGet("UserProjects/{id}")]
+    [HttpGet("User/Projects/{id}")]
     public async Task<IEnumerable<ProjectDTO>> GetUserProjects(string id) {
         ProjectUser? user = _dbContext.Users
             .Include(x => x.Projects)
