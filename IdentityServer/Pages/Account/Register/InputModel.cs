@@ -7,7 +7,7 @@ public class InputModel {
 
     [Required] public string Password { get; set; }
 
-    [Required] [Url] public string Avatar { get; set; }
+    [Required][Url] public string Avatar { get; set; }
 
     public bool RememberLogin { get; set; }
 

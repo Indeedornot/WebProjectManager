@@ -1,9 +1,9 @@
 using blazor;
 using blazor.Api;
 
-using Refit;
-
 using Microsoft.IdentityModel.Logging;
+
+using Refit;
 
 using shared.Common;
 

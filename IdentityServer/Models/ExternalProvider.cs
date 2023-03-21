@@ -1,4 +1,4 @@
-﻿namespace IdentityServer.Models; 
+﻿namespace IdentityServer.Models;
 
 public class ExternalProvider {
     public string DisplayName { get; set; }

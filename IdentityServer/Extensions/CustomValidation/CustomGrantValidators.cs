@@ -47,37 +47,37 @@ public class CustomGrantValidators {
 
             switch (style) {
                 case "impersonation": {
-                    // set token client_id to original id
-                    context.Request.ClientId = clientId;
+                        // set token client_id to original id
+                        context.Request.ClientId = clientId;
 
-                    context.Result = new GrantValidationResult(
-                        sub,
-                        GrantType,
-                        customResponse: customResponse);
-                    break;
-                }
+                        context.Result = new GrantValidationResult(
+                            sub,
+                            GrantType,
+                            customResponse: customResponse);
+                        break;
+                    }
                 case "delegation": {
-                    // set token client_id to original id
-                    context.Request.ClientId = clientId;
+                        // set token client_id to original id
+                        context.Request.ClientId = clientId;
 
-                    var actor = new { client_id = context.Request.Client.ClientId };
+                        var actor = new { client_id = context.Request.Client.ClientId };
 
-                    var actClaim = new Claim(JwtClaimTypes.Actor, JsonSerializer.Serialize(actor), IdentityServerConstants.ClaimValueTypes.Json);
+                        var actClaim = new Claim(JwtClaimTypes.Actor, JsonSerializer.Serialize(actor), IdentityServerConstants.ClaimValueTypes.Json);
 
-                    context.Result = new GrantValidationResult(
-                        sub,
-                        GrantType,
-                        new[] { actClaim },
-                        customResponse: customResponse);
-                    break;
-                }
+                        context.Result = new GrantValidationResult(
+                            sub,
+                            GrantType,
+                            new[] { actClaim },
+                            customResponse: customResponse);
+                        break;
+                    }
                 case "custom": {
-                    context.Result = new GrantValidationResult(
-                        sub,
-                        GrantType,
-                        customResponse: customResponse);
-                    break;
-                }
+                        context.Result = new GrantValidationResult(
+                            sub,
+                            GrantType,
+                            customResponse: customResponse);
+                        break;
+                    }
             }
         }
 

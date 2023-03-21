@@ -31,7 +31,10 @@ public class UserController : ControllerBase {
         IEnumerable<ApplicationUserDTO> userData = await _userClient.GetUserData(userIds);
 
         IEnumerable<UserDTO> usersDto = userData.Select(x => new UserDTO {
-            Id = x.Id, Name = x.Name, Avatar = x.Avatar, Projects = _entityHandler.GetProjectIdsFromUsers(users, x.Id)
+            Id = x.Id,
+            Name = x.Name,
+            Avatar = x.Avatar,
+            Projects = _entityHandler.GetProjectIdsFromUsers(users, x.Id)
         });
 
         return usersDto;

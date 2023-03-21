@@ -151,7 +151,10 @@ public class ProjectController : ControllerBase {
             user.Projects = user.Projects.Append(project);
         }
         else {
-            user = new ProjectUser { UserId = User.FindFirstValue(ClaimTypes.NameIdentifier), Projects = new List<Project>() { project } };
+            user = new ProjectUser {
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                Projects = new List<Project>() { project }
+            };
             _dbContext.Users.Add(user);
         }
 

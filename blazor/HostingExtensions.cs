@@ -21,28 +21,28 @@ public static class HostingExtensions {
                 options.Cookie.SameSite = SameSiteMode.Strict;
             })
             .AddOpenIdConnect("oidc", options => {
-                    options.Authority = IPs.IdentityServer;
+                options.Authority = IPs.IdentityServer;
 
-                    options.ClientId = "web";
-                    options.ClientSecret = "secret";
-                    options.ResponseType = "code";
-                    options.ResponseMode = "query";
+                options.ClientId = "web";
+                options.ClientSecret = "secret";
+                options.ResponseType = "code";
+                options.ResponseMode = "query";
 
-                    options.SignInScheme = "cookie";
+                options.SignInScheme = "cookie";
 
-                    options.Scope.Clear();
-                    options.Scope.Add(Scopes.ProjectScope.Name);
-                    options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
-                    options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
-                    options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
+                options.Scope.Clear();
+                options.Scope.Add(Scopes.ProjectScope.Name);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OpenId);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.Profile);
+                options.Scope.Add(IdentityServerConstants.StandardScopes.OfflineAccess);
 
-                    options.Scope.Add(IdentityResources.Avatar.Name);
-                    options.ClaimActions.MapJsonKey(Claims.AvatarClaim, Claims.AvatarClaim);
+                options.Scope.Add(IdentityResources.Avatar.Name);
+                options.ClaimActions.MapJsonKey(Claims.AvatarClaim, Claims.AvatarClaim);
 
-                    options.MapInboundClaims = false;
-                    options.GetClaimsFromUserInfoEndpoint = true;
-                    options.SaveTokens = true;
-                }
+                options.MapInboundClaims = false;
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.SaveTokens = true;
+            }
             );
         return services;
     }

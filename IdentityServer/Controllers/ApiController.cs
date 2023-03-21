@@ -2,9 +2,9 @@
 
 using Microsoft.AspNetCore.Mvc;
 
-using System.Linq;
-
 using shared.Models;
+
+using System.Linq;
 
 namespace IdentityServer.Controllers;
 
