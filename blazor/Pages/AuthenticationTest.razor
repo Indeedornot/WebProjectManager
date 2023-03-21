@@ -5,7 +5,7 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @using blazor.Api
-@inject IWebApi webApi
+@inject IProjectClient ProjectClient
 
 
 <div class="ml-4">
@@ -51,7 +51,7 @@
 
     private async Task GetApiResponse() {
         try {
-            ApiResponse = await webApi.Hello();
+            ApiResponse = await ProjectClient.Hello();
         }
         catch (Exception e) {
             ApiResponse = e.Message;

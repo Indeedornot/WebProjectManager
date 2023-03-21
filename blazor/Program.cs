@@ -20,7 +20,12 @@ builder.Services.AddConfiguredIdentityServer();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<HeaderHandler>();
-builder.Services.AddRefitClient<IWebApi>()
+builder.Services.AddRefitClient<IProjectClient>()
+    .ConfigureHttpClient(c => {
+        c.BaseAddress = new Uri(IPs.Api);
+    }).AddHttpMessageHandler<HeaderHandler>();
+
+builder.Services.AddRefitClient<IUserClient>()
     .ConfigureHttpClient(c => {
         c.BaseAddress = new Uri(IPs.Api);
     }).AddHttpMessageHandler<HeaderHandler>();
