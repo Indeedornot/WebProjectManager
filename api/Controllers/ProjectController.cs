@@ -81,11 +81,11 @@ public class ProjectController : ControllerBase {
         return Ok();
     }
 
-    [HttpPut("Project/Join/{id:int}")]
-    public async Task<IActionResult> JoinProject(int id) {
+    [HttpPut("Project/Update")]
+    public async Task<IActionResult> UpdateProject(ProjectUpdateDTO projectDto) {
         Project? project = _dbContext.Projects
             .Include(x => x.Assignees)
-            .FirstOrDefault(x => x.Id == id);
+            .FirstOrDefault(x => x.Id == projectDto.Id);
 
         if (project == null) {
             return NotFound();
