@@ -94,7 +94,7 @@ public class Index : PageModel {
             return Page();
         }
 
-        ApplicationUser newUser = new() { UserName = Input.Username, Avatar = Input.Avatar };
+        ApplicationUser newUser = new() { UserName = Input.Username, Avatar = new Uri(Input.Avatar) };
         IdentityResult result = await _userManager.CreateAsync(newUser, Input.Password);
         if (!result.Succeeded) {
             await _events.RaiseAsync(new UserLoginFailureEvent(Input.Username, RegisterOptions.UserAlreadyExistsErrorMessage,

@@ -19,7 +19,7 @@ public static class TestUsers {
                 UserName = "alice",
                 Email = "AliceSmith@email.com",
                 EmailConfirmed = true,
-                Avatar = "https://gravatar.com/avatar/33909757da820e555e42c98692971f52?s=400&d=retro&r=x"
+                Avatar = new Uri("https://gravatar.com/avatar/33909757da820e555e42c98692971f52?s=400&d=retro&r=x")
             },
             Claims = new Claim[] {
                 new(JwtClaimTypes.Name, "Alice Smith"), new(JwtClaimTypes.GivenName, "Alice"), new(JwtClaimTypes.FamilyName, "Smith"),
@@ -32,7 +32,7 @@ public static class TestUsers {
                 UserName = "bob",
                 Email = "BobSmith@email.com",
                 EmailConfirmed = true,
-                Avatar = "https://gravatar.com/avatar/5c9dac459fd665bd9aef5123a7cafee8?s=400&d=retro&r=x"
+                Avatar = new Uri("https://gravatar.com/avatar/5c9dac459fd665bd9aef5123a7cafee8?s=400&d=retro&r=x")
             },
             Claims = new Claim[] {
                 new(JwtClaimTypes.Name, "Bob Smith"), new(JwtClaimTypes.GivenName, "Bob"), new(JwtClaimTypes.FamilyName, "Smith"),

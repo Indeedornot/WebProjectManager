@@ -35,7 +35,7 @@ public class CustomProfileService : ProfileService<ApplicationUser> {
     private async Task AddRequestedClaims(ProfileDataRequestContext context, ApplicationUser user) {
         ClaimsPrincipal principal = await GetUserClaimsAsync(user);
         var id = (ClaimsIdentity)principal.Identity;
-        id.AddClaim(new Claim(Claims.AvatarClaim, user.Avatar));
+        id.AddClaim(new Claim(Claims.AvatarClaim, user.Avatar.ToString()));
         context.AddRequestedClaims(principal.Claims);
     }
 
