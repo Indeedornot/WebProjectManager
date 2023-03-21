@@ -367,3 +367,7 @@ safurai.yml
 
 blazor/wwwroot/css/tailwindcss/output.css
 .ignore
+
+*.db-wal
+
+*.db-shm
