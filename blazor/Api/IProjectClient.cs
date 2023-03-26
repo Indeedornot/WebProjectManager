@@ -22,7 +22,7 @@ public interface IProjectClient {
     Task<ProjectDTO?> GetProject(int id);
 
     [Get(Routes.Project.GetAll)]
-    Task<IEnumerable<ProjectDTO>> GetProjects();
+    Task<IEnumerable<ProjectDTO>> GetProjects(int page = 1, int pageSize = 10);
 
     [Put(Routes.Project.Leave)]
     Task LeaveProject(int id);
