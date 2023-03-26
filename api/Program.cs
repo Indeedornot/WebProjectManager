@@ -2,6 +2,7 @@ using api.Api;
 using api.Database;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
 using NSwag;
@@ -71,6 +72,13 @@ builder.Services.AddOpenApiDocument(options => {
 });
 
 WebApplication? app = builder.Build();
+
+//ensure database is created
+using (IServiceScope scope = app.Services.CreateScope()) {
+    IServiceProvider services = scope.ServiceProvider;
+    DataContext context = services.GetRequiredService<DataContext>();
+    context.Database.Migrate();
+}
 
 app.UseHttpsRedirection();
 

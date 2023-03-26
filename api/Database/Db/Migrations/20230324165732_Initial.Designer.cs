@@ -8,11 +8,11 @@ using api.Database;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Database.Db.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230228174815_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20230324165732_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,7 +20,7 @@ namespace api.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.3");
 
-            modelBuilder.Entity("ProjectUser", b =>
+            modelBuilder.Entity("ProjectProjectUser", b =>
                 {
                     b.Property<int>("AssigneesId")
                         .HasColumnType("INTEGER");
@@ -41,6 +41,9 @@ namespace api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -56,18 +59,27 @@ namespace api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("shared.Models.User", b =>
+            modelBuilder.Entity("shared.Models.ProjectUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
@@ -76,9 +88,9 @@ namespace api.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ProjectUser", b =>
+            modelBuilder.Entity("ProjectProjectUser", b =>
                 {
-                    b.HasOne("shared.Models.User", null)
+                    b.HasOne("shared.Models.ProjectUser", null)
                         .WithMany()
                         .HasForeignKey("AssigneesId")
                         .OnDelete(DeleteBehavior.Cascade)
