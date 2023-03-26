@@ -1,7 +1,13 @@
 ﻿@page "/"
+@using blazor.Pages.IndexPages
 
-<PageTitle>Index</PageTitle>
-
-<h1 class="text-emphasis">Hello, world!</h1>
-
-Welcome to your new app.
+<AuthorizeView>
+    <Authorized>
+        <PageTitle>Dashboard</PageTitle>
+        <Dashboard/>
+    </Authorized>
+    <NotAuthorized>
+        <PageTitle>Home Page</PageTitle>
+        <Landing/>
+    </NotAuthorized>
+</AuthorizeView>
