@@ -10,7 +10,7 @@ public interface IProjectClient {
     Task<string> Hello();
 
     [Post(Routes.Project.Create)]
-    Task CreateProject(ProjectDTO project);
+    Task CreateProject(ProjectCreateDTO project);
 
     [Delete(Routes.Project.Delete)]
     Task DeleteProject(int id);
@@ -22,7 +22,7 @@ public interface IProjectClient {
     Task<ProjectDTO?> GetProject(int id);
 
     [Get(Routes.Project.GetAll)]
-    Task<IEnumerable<ProjectDTO>> GetProjects(int page = 1, int pageSize = 10);
+    Task<IEnumerable<ProjectDTO>> GetAllProjects();
 
     [Put(Routes.Project.Leave)]
     Task LeaveProject(int id);

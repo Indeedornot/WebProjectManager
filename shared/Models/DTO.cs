@@ -22,6 +22,14 @@ public class ProjectUpdateDTO {
     public string? Status { get; set; }
 }
 
+public class ProjectCreateDTO {
+    public string Name { get; set; }
+    public string Description { get; set; }
+    public DateTime DueDate { get; set; }
+    public string Status { get; set; }
+    public IEnumerable<string> Assignees { get; set; }
+}
+
 public class UserDTO {
     public string Id { get; set; }
     public Uri Avatar { get; set; }

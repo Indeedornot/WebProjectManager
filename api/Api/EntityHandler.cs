@@ -1,12 +1,16 @@
-﻿using shared.Models;
+﻿using api.Database;
+
+using shared.Models;
 
 namespace api.Api;
 
 public class EntityHandler {
     private readonly IUserClient _userClient;
+    private readonly DataContext _dbContext;
 
-    public EntityHandler(IUserClient userClient) {
+    public EntityHandler(IUserClient userClient, DataContext dbContext) {
         _userClient = userClient;
+        _dbContext = dbContext;
     }
 
     /// <summary>
@@ -16,7 +20,7 @@ public class EntityHandler {
     /// <returns></returns>
     public async Task<IEnumerable<UserDTO>> GetUsersByProject(Project project) {
         IEnumerable<string> assignees = project.Assignees.Select(x => x.UserId);
-        IEnumerable<ApplicationUserDTO> users = await _userClient.GetUserData(assignees);
+        IEnumerable<ApplicationUserDTO> users = await _userClient.GetUsersByIds(assignees);
         return users.Select(u => new UserDTO { Id = u.Id, Name = u.Name, Avatar = u.Avatar });
     }
 
@@ -26,8 +30,14 @@ public class EntityHandler {
     /// <param name="projects"></param>
     /// <returns></returns>
     public async Task<IEnumerable<UserDTO>> GetUsersByProjects(IEnumerable<Project> projects) {
-        IEnumerable<string> assignees = projects.SelectMany(p => p.Assignees).Select(x => x.UserId).Distinct();
-        IEnumerable<ApplicationUserDTO> users = await _userClient.GetUserData(assignees);
+        // Get all distinct user ids
+        IEnumerable<string> assignees = projects
+            .SelectMany(p => p.Assignees)
+            .Select(x => x.UserId)
+            .Distinct();
+
+        // Get their data
+        IEnumerable<ApplicationUserDTO> users = await _userClient.GetUsersByIds(assignees);
         return users.Select(u => new UserDTO { Id = u.Id, Name = u.Name, Avatar = u.Avatar });
     }
 
@@ -87,22 +97,40 @@ public class EntityHandler {
         };
     }
 
-    public async Task<UserDTO?> GetUser(ProjectUser projectUser) {
-        IEnumerable<ApplicationUserDTO> users = await _userClient.GetUserData(new[] { projectUser.UserId });
-        ApplicationUserDTO user = users.First();
-        return new UserDTO() { Avatar = user.Avatar, Id = user.Id, Name = user.Name, Projects = projectUser.Projects.Select(x => x.Id) };
-    }
+    /// <summary>
+    /// Returns ids of projects that the user is connected to
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    public IEnumerable<int> GetProjectIdsForUser(string userId) {
+        IQueryable<int> projectIds = _dbContext.Users
+            .Where(pu => pu.UserId == userId)
+            .SelectMany(pu => pu.Projects)
+            .Select(p => p.Id);
 
-    public IEnumerable<int> GetProjectIdsFromUsers(IEnumerable<ProjectUser> users, string userId) {
-        ProjectUser? projectUser = users.FirstOrDefault(u => u.UserId == userId);
-        if (projectUser == null) {
-            return Enumerable.Empty<int>();
-        }
-
-        return projectUser.Projects.Select(p => p.Id);
+        return projectIds;
     }
 
     public bool IsUserInProject(Project project, string userId) {
         return project.Assignees.Any(a => a.UserId == userId);
+    }
+
+    /// <summary>
+    /// Gets Users that are already connected to some project
+    /// </summary>
+    /// <param name="userIds"></param>
+    /// <returns></returns>
+    public IEnumerable<ProjectUser> GetExistingUsers(IEnumerable<string> userIds) {
+        return _dbContext.Users.Where(u => userIds.Contains(u.UserId));
+    }
+
+    /// <summary>
+    /// Gets Users that are not connected to any project
+    /// </summary>
+    /// <param name="users"></param>
+    /// <returns></returns>
+    public IEnumerable<ProjectUser> GetNewUsers(IEnumerable<string> users) {
+        return users.Where(u => !_dbContext.Users.Any(x => x.UserId == u))
+            .Select(x => new ProjectUser() { UserId = x });
     }
 }

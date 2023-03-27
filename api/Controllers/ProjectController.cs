@@ -24,15 +24,28 @@ public class ProjectController : ControllerBase {
     }
 
     [HttpPost("Project/Create")]
-    public async Task<IActionResult> CreateProject(ProjectDTO projectDto) {
-        var project = new Project { Name = projectDto.Name, Description = projectDto.Description, Assignees = new List<ProjectUser>() };
-        IEnumerable<ProjectUser> projectUsers = projectDto.Assignees.Select(x => new ProjectUser { UserId = x.Id, Projects = new List<Project> { project } });
-        project.Assignees = projectUsers.ToList();
+    public async Task CreateProject(ProjectCreateDTO projectDto) {
+        var project = new Project {
+            Name = projectDto.Name,
+            Status = projectDto.Status,
+            Description = projectDto.Description,
+            DueDate = projectDto.DueDate,
+            Assignees = new List<ProjectUser>()
+        };
+
+        var existingUsers = _entityHandler.GetExistingUsers(projectDto.Assignees).ToList();
+
+        var newUsers = _entityHandler.GetNewUsers(projectDto.Assignees).ToList();
+        if (newUsers.Count > 0) {
+            await _dbContext.Users.AddRangeAsync(newUsers);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        var projectUsers = existingUsers.Concat(newUsers).ToList();
+        project.Assignees = projectUsers;
 
         await _dbContext.Projects.AddAsync(project);
         await _dbContext.SaveChangesAsync();
-
-        return Ok();
     }
 
     [HttpDelete("Project/Delete/{id:int}")]
@@ -97,12 +110,10 @@ public class ProjectController : ControllerBase {
         return projectDto;
     }
 
-    [HttpGet("Projects/{page:int}/{pageSize:int}")] //create a method getting projects from database with pagination
-    public async Task<IEnumerable<ProjectDTO>> GetProjects(int page = 1, int pageSize = 10) {
+    [HttpGet("Projects")]
+    public async Task<IEnumerable<ProjectDTO>> GetProjects() {
         IEnumerable<Project> projects = _dbContext.Projects
-            .Include(x => x.Assignees)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize);
+            .Include(x => x.Assignees);
 
         IEnumerable<ProjectDTO> projectsDto = await _entityHandler.GetProjectsWithUsers(projects);
         return projectsDto;
@@ -151,10 +162,7 @@ public class ProjectController : ControllerBase {
             user.Projects = user.Projects.Append(project);
         }
         else {
-            user = new ProjectUser {
-                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
-                Projects = new List<Project>() { project }
-            };
+            user = new ProjectUser { UserId = User.FindFirstValue(ClaimTypes.NameIdentifier), Projects = new List<Project>() { project } };
             _dbContext.Users.Add(user);
         }
 
