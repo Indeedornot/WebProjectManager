@@ -2,9 +2,9 @@
 
 <PageTitle>blazor</PageTitle>
 
-<div class="w-screen h-screen">
+<div class="w-screen h-screen bg-dark">
     <main class="w-full h-full flex flex-none flex-col">
-        <div class="h-14 px-4 border-b border-b-muted grid grid-flow-col">
+        <div class="h-14 px-4 border-b border-b-muted grid grid-flow-col text-default">
             <div class="h-full justify-self-start flex items-center">
                 <NavLink href="/">Home</NavLink>
                 <AuthorizeView>
@@ -22,7 +22,7 @@
             </div>
         </div>
 
-        <div class="w-full flex-grow">
+        <div class="w-full flex-grow bg-default overflow-auto">
             @Body
         </div>
     </main>
