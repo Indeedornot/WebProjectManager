@@ -10,7 +10,7 @@ public interface IUserClient {
     Task<UserDTO?> GetUser(string id);
 
     [Get(Routes.User.GetAll)]
-    Task<IEnumerable<UserDTO>> GetUsers(int page = 1, int pageSize = 10);
+    Task<IEnumerable<UserDTO>> GetAllUsers();
 
     [Get(Routes.User.GetProjects)]
     Task<IEnumerable<ProjectDTO>> GetUserProjects(string id);

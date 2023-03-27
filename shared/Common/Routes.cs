@@ -9,7 +9,7 @@ public class Routes {
         public const string Update = "/project/update";
 
         public const string Get = "/project/{id}";
-        public const string GetAll = "/projects/{page}/{pageSize}";
+        public const string GetAll = "/projects";
 
         public const string Leave = "/project/leave/{id}";
         public const string Join = "/project/join/{id}";
@@ -17,7 +17,7 @@ public class Routes {
 
     public static class User {
         public const string Get = "/user/{id}";
-        public const string GetAll = "/users/{page}/{pageSize}";
+        public const string GetAll = "/users";
         public const string GetProjects = "/user/projects/{id}";
     }
 }

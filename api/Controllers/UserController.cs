@@ -20,21 +20,12 @@ public class UserController : ControllerBase {
         _entityHandler = entityHandler;
     }
 
-    [HttpGet("Users/{page:int}/{pageSize:int}")]
-    public async Task<IEnumerable<UserDTO>> GetUsers(int page = 1, int pageSize = 10) {
-        IEnumerable<ProjectUser> users = _dbContext.Users
-            .Include(x => x.Projects)
-            .Skip((page - 1) * pageSize)
-            .Take(pageSize);
+    [HttpGet("Users")]
+    public async Task<IEnumerable<UserDTO>> GetUsers() {
+        IEnumerable<ApplicationUserDTO> users = await _userClient.GetAllUsers();
 
-        IEnumerable<string> userIds = users.Select(x => x.UserId);
-        IEnumerable<ApplicationUserDTO> userData = await _userClient.GetUserData(userIds);
-
-        IEnumerable<UserDTO> usersDto = userData.Select(x => new UserDTO {
-            Id = x.Id,
-            Name = x.Name,
-            Avatar = x.Avatar,
-            Projects = _entityHandler.GetProjectIdsFromUsers(users, x.Id)
+        IEnumerable<UserDTO> usersDto = users.Select(x => new UserDTO {
+            Id = x.Id, Name = x.Name, Avatar = x.Avatar, Projects = _entityHandler.GetProjectIdsForUser(x.Id)
         });
 
         return usersDto;
@@ -42,14 +33,14 @@ public class UserController : ControllerBase {
 
     [HttpGet("User/{id}")]
     public async Task<UserDTO?> GetUser(string id) {
-        ProjectUser? user = _dbContext.Users
-            .Include(x => x.Projects)
-            .FirstOrDefault(x => x.UserId == id);
+        ApplicationUserDTO? user = await _userClient.GetUserById(id);
         if (user == null) {
             return null;
         }
 
-        return await _entityHandler.GetUser(user);
+        IEnumerable<int>? projects = _entityHandler.GetProjectIdsForUser(id);
+        var userDto = new UserDTO { Id = user.Id, Name = user.Name, Avatar = user.Avatar, Projects = projects };
+        return userDto;
     }
 
     [HttpGet("User/Projects/{id}")]
