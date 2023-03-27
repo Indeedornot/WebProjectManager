@@ -1,20 +1,17 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
+
+using System;
 
 #nullable disable
 
-namespace api.Database.Db.Migrations
-{
+namespace api.Database.Db.Migrations {
     /// <inheritdoc />
-    public partial class Initial : Migration
-    {
+    public partial class Initial : Migration {
         /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
+        protected override void Up(MigrationBuilder migrationBuilder) {
             migrationBuilder.CreateTable(
                 name: "Projects",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(type: "TEXT", nullable: false),
@@ -24,35 +21,30 @@ namespace api.Database.Db.Migrations
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Projects", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Users",
-                columns: table => new
-                {
+                columns: table => new {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     UserId = table.Column<string>(type: "TEXT", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "TEXT", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "UserProject",
-                columns: table => new
-                {
+                columns: table => new {
                     AssigneesId = table.Column<int>(type: "INTEGER", nullable: false),
                     ProjectsId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
-                constraints: table =>
-                {
+                constraints: table => {
                     table.PrimaryKey("PK_UserProject", x => new { x.AssigneesId, x.ProjectsId });
                     table.ForeignKey(
                         name: "FK_UserProject_Projects_ProjectsId",
@@ -75,8 +67,7 @@ namespace api.Database.Db.Migrations
         }
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
+        protected override void Down(MigrationBuilder migrationBuilder) {
             migrationBuilder.DropTable(
                 name: "UserProject");
 
