@@ -1,0 +1,66 @@
+﻿@using System.ComponentModel
+<div class="relative">
+    <button class="rounded-2xl bg-subtle border-muted h-full border-2 text-default hover:bg-hover w-full text-left pl-2" onclick="@Toggle">
+        @if (selectedUsers.Count == 0) {
+            <span>Choose Assignees:</span>
+        } else {
+            <span>@selectedUsers.Count Users selected</span>
+        }
+    </button>
+
+
+    @if (IsOpen) {
+        <ul class="absolute z-[1] top-full left-0 bg-subtle w-full rounded-2xl mt-1 border-2 border-muted max-h-64 overflow-auto">
+            @foreach (var user in Users) {
+                <li class="hover:bg-hover first:rounded-t-2xl w-full pl-2 pr-3 py-1.5 flex flex-none">
+                    <div class="flex flex-grow">
+                        <UserDisplay User="@user"></UserDisplay>
+                    </div>
+                    <input type="checkbox"
+                           class="w-6"
+                           id="@user.Id"
+                           checked="@selectedUsers.Contains(user.Id)"
+                           @onchange="@((e) => ToggleOption(e, user.Id))"/>
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public string CssClass { get; set; }
+
+    [Parameter]
+    public IEnumerable<UserDTO> Users { get; set; }
+
+    [Parameter]
+    public EventCallback<IEnumerable<string>> SelectedUsersChanged { get; set; }
+
+    [Parameter]
+    public IEnumerable<string> SelectedUsers {
+        get => selectedUsers;
+        set => selectedUsers = new HashSet<string>(value);
+    }
+
+    private HashSet<string> selectedUsers { get; set; }
+
+    private bool IsOpen { get; set; }
+
+    private void Toggle() {
+        IsOpen = !IsOpen;
+    }
+
+    private void ToggleOption(ChangeEventArgs e, string option) {
+        var isChecked = e.Value as bool?;
+        if (isChecked is true) {
+            selectedUsers.Add(option);
+        } else {
+            selectedUsers.Remove(option);
+        }
+
+        SelectedUsersChanged.InvokeAsync(selectedUsers);
+    }
+
+}
