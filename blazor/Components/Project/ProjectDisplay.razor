@@ -1,8 +1,8 @@
-﻿<div class="bg-dark rounded-md py-1 px-2 flex flex-none flex-col ml-1.5">
-    <div class="items-center grid-flow-col grid">
-        <h1 class="text-emphasis text-xl truncate">@Project.Name</h1>
+﻿<div class="bg-dark rounded-xl w-full flex flex-none flex-col border border-muted">
+    <div class="items-center grid-flow-col grid pt-2 px-2">
+        <a class="text-emphasis text-2xl ml-0.5 truncate font-medium" href="/projects/display/@Project.Id">@Project.Name</a>
         <div class="justify-self-end flex flex-grow flex-none items-center">
-            <p class="text-default text-sm mr-1">
+            <p class="text-default text-lg mr-1">
                 due: @Project.DueDate.ToString("dd/MM/yyyy")
             </p>
             <button @onclick="@ToggleExpanded">
@@ -14,14 +14,16 @@
 
     </div>
 
-    <span class="text-muted text-sm break-all @(IsExpanded ? "" : "description")">@Project.Description asdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd</span>
+    <span class="text-muted px-2 ml-3 text-xl break-all @(IsExpanded ? "" : "description")">@Project.Description</span>
 
     @if (IsExpanded) {
-        <div class="mt-1">
-            <h1 class="text-lg text-emphasis">Assignees: </h1>
-            <div class="space-y-1 ml-1 mt-1 grid grid-auto-repeat">
+        <div class="mt-1.5 pt-2 bg-default rounded-b-xl">
+            <h1 class="text-3xl ml-2.5 text-emphasis">Assignees: </h1>
+            <div class="ml-4 mt-0.5 py-2 grid grid-auto-repeat">
                 @foreach (var user in Project.Assignees) {
-                    <UserDisplay User="@user"></UserDisplay>
+                    <div class="bg-dark rounded-md pl-2 py-2">
+                        <UserDisplay User="@user"></UserDisplay>
+                    </div>
                 }
             </div>
         </div>
