@@ -1,14 +1,32 @@
-@page "/projects/display/{id?}"
+@page "/projects/display/{Id}"
+@attribute [Authorize]
+@using blazor.Api
+@inject IProjectClient _projectClient
 
 <div class="w-full h-full flex flex-col flex-none bg-default">
-    <div class="flex flex-none flex-col h-36 text-emphasis items-center justify-center">
-        <h1 class="text-6xl">Welcome</h1>
-        <p class="text-default mt-2">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>
-
-    <div class="flex flex-grow flex-col items-center">
-        <div class="w-3/4 flex flex-none items-center h-full flex-col">
-            <ProjectDisplay/>
+    @if (_project != null) {
+        <div class="flex flex-grow flex-col items-center justify-content-start">
+            <div class="w-3/4 flex flex-none h-3/4 justify-center items-center flex-col">
+                <ProjectDisplay/>
+            </div>
         </div>
-    </div>
+    } else {
+        <div class="flex flex-grow items-center justify-center text-6xl text-default">
+            Could not find requested project.
+        </div>
+    }
 </div>
+
+@code {
+
+    [Parameter]
+    public string Id { get; set; }
+
+    private ProjectDTO _project;
+
+    protected override async Task OnInitializedAsync() {
+        bool isIdNumber = int.TryParse(Id, out int id);
+        _project = await _projectClient.GetProject(id);
+    }
+
+}

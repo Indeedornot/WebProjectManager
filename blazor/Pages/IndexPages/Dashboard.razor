@@ -14,7 +14,7 @@
 
             <div class="w-full row-start-1 col-start-1 px-2 pt-8">
                 @if (projects.Any()) {
-                    <ProjectsTable Projects="@SampleData.Projects"/>
+                    <ProjectsTable Projects="@projects"/>
                 } else {
                     <h1 class="text-default text-center pt-4 text-4xl font-semibold">Nobody there but crickets...</h1>
                     <h1 class="text-emphasis text-center pt-4 text-4xl font-semibold">
@@ -33,7 +33,7 @@
     private List<ProjectDTO> projects = new();
 
     protected override async Task OnInitializedAsync() {
-        var fetched = await projectClient.GetProjects();
+        var fetched = await projectClient.GetAllProjects();
         projects = fetched.ToList();
     }
 
