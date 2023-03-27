@@ -1,5 +1,5 @@
-﻿<div class="w-full bg-dark rounded-md p-2 flex flex-none flex-col">
-    <div class="h-10 items-center grid grid-flow-col justify-between">
+﻿<div class="w-full flex flex-none flex-col">
+    <div class="h-10 items-center grid grid-flow-col justify-between box-content p-2 only:rounded-md rounded-t-md bg-dark">
         <UserDisplay User="@User"/>
 
         <button class="justify-self-end" @onclick="@ToggleExpanded">
@@ -10,18 +10,17 @@
     </div>
 
     @if (IsExpanded) {
-        <div class="flex flex-col">
+        <div class="flex flex-col flex-none bg-subtle p-2 rounded-b-md">
             <div class="flex flex-col ml-0.5 mt-0.5">
                 @if (Projects?.Any() is true) {
-                    <h2 class="text-default truncate">Projects</h2>
-                    <div class="flex flex-col">
-                        @*TODO: Fetch projects from API*@
-                        @*@foreach(var project in User.Projects) {
-                        <client.Components.Projects.Display Project="@project" />
-                    }*@
+                    <h2 class="text-default truncate font-medium text-2xl">Projects</h2>
+                    <div class="flex flex-col mt-1">
+                        @foreach (var project in Projects) {
+                            <ProjectDisplay Project="@project"/>
+                        }
                     </div>
                 } else {
-                    <h2 class="text-default truncate">No projects</h2>
+                    <h2 class="text-default truncate font-medium text-lg">No projects</h2>
                 }
             </div>
         </div>
