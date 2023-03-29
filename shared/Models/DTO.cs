@@ -1,11 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace shared.Models;
 
-public class ProjectDTO {
+public class ProjectDTO
+{
     public int Id { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -14,7 +15,8 @@ public class ProjectDTO {
     public IEnumerable<UserDTO> Assignees { get; set; }
 }
 
-public class ProjectUpdateDTO {
+public class ProjectUpdateDTO
+{
     public int Id { get; set; }
     public string? Name { get; set; }
     public string? Description { get; set; }
@@ -22,7 +24,8 @@ public class ProjectUpdateDTO {
     public string? Status { get; set; }
 }
 
-public class ProjectCreateDTO {
+public class ProjectCreateDTO
+{
     public string Name { get; set; }
     public string Description { get; set; }
     public DateTime DueDate { get; set; }
@@ -30,7 +33,8 @@ public class ProjectCreateDTO {
     public IEnumerable<string> Assignees { get; set; }
 }
 
-public class UserDTO {
+public class UserDTO
+{
     public string Id { get; set; }
     public Uri Avatar { get; set; }
     public string Name { get; set; }
@@ -38,7 +42,8 @@ public class UserDTO {
     public IEnumerable<int> Projects { get; set; }
 }
 
-public class ApplicationUserDTO {
+public class ApplicationUserDTO
+{
     public string Id { get; set; }
     public string Name { get; set; }
     public Uri Avatar { get; set; }

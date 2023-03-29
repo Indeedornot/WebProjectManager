@@ -1,9 +1,10 @@
-// Copyright (c) Duende Software. All rights reserved.
+﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
 namespace IdentityServer.Pages.Consent;
 
-public class InputModel {
+public class InputModel
+{
     public string Button { get; set; }
     public IEnumerable<string> ScopesConsented { get; set; }
     public bool RememberConsent { get; set; } = true;

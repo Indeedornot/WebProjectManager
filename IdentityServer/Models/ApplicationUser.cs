@@ -7,13 +7,16 @@ using Microsoft.AspNetCore.Identity;
 namespace IdentityServer.Models;
 
 // Add profile data for application users by adding properties to the ApplicationUser class
-public class ApplicationUser : IdentityUser {
+public class ApplicationUser : IdentityUser
+{
     public Uri Avatar { get; set; }
 
-    public ApplicationUser() {
+    public ApplicationUser()
+    {
     }
 
-    public ApplicationUser(string userName, string email, bool emailConfirmed) {
+    public ApplicationUser(string userName, string email, bool emailConfirmed)
+    {
         UserName = userName;
         Email = email;
         EmailConfirmed = emailConfirmed;

@@ -1,9 +1,10 @@
-// Copyright (c) Duende Software. All rights reserved.
+﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
 namespace IdentityServer.Pages.Ciba;
 
-public class ViewModel {
+public class ViewModel
+{
     public string ClientName { get; set; }
     public string ClientUrl { get; set; }
     public string ClientLogoUrl { get; set; }
@@ -14,7 +15,8 @@ public class ViewModel {
     public IEnumerable<ScopeViewModel> ApiScopes { get; set; }
 }
 
-public class ScopeViewModel {
+public class ScopeViewModel
+{
     public string Name { get; set; }
     public string Value { get; set; }
     public string DisplayName { get; set; }
@@ -25,7 +27,8 @@ public class ScopeViewModel {
     public IEnumerable<ResourceViewModel> Resources { get; set; }
 }
 
-public class ResourceViewModel {
+public class ResourceViewModel
+{
     public string Name { get; set; }
     public string DisplayName { get; set; }
 }

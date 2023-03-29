@@ -5,7 +5,8 @@ using shared.Models;
 
 namespace blazor.Api;
 
-public interface IUserClient {
+public interface IUserClient
+{
     [Get(Routes.User.Get)]
     Task<UserDTO?> GetUser(string id);
 

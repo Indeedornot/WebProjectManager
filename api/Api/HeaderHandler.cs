@@ -1,38 +1,44 @@
-﻿using IdentityModel;
+﻿using System.Diagnostics;
+using System.Net;
+
+using IdentityModel;
 using IdentityModel.Client;
 
 using Microsoft.AspNetCore.Authentication;
 
 using shared.Common;
 
-using System.Diagnostics;
-using System.Net;
-
 namespace api.Api;
 
-public class HeaderHandler : DelegatingHandler {
+public class HeaderHandler : DelegatingHandler
+{
     private static DiscoveryCache DiscoveryCache { get; } = new(IPs.IdentityServer);
     private readonly IHttpContextAccessor _contextAccessor;
     private readonly HttpClient _httpClient;
 
-    public HeaderHandler(IHttpContextAccessor contextAccessor, HttpClient httpClient) {
+    public HeaderHandler(IHttpContextAccessor contextAccessor, HttpClient httpClient)
+    {
         _contextAccessor = contextAccessor;
         _httpClient = httpClient;
     }
 
-    public HeaderHandler(HttpMessageHandler innerHandler, IHttpContextAccessor contextAccessor, HttpClient httpClient) : base(innerHandler) {
+    public HeaderHandler(HttpMessageHandler innerHandler, IHttpContextAccessor contextAccessor, HttpClient httpClient) : base(innerHandler)
+    {
         _contextAccessor = contextAccessor;
         _httpClient = httpClient;
     }
 
-    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
         string? token = await _contextAccessor.HttpContext!.GetTokenAsync("access_token");
-        if (token is null) {
+        if (token is null)
+        {
             return new HttpResponseMessage(HttpStatusCode.Unauthorized);
         }
 
         string? delegatedToken = await DelegateToken(token);
-        if (delegatedToken is null) {
+        if (delegatedToken is null)
+        {
             return new HttpResponseMessage(HttpStatusCode.Unauthorized);
         }
 
@@ -40,13 +46,16 @@ public class HeaderHandler : DelegatingHandler {
         return await base.SendAsync(request, cancellationToken);
     }
 
-    private async Task<string?> DelegateToken(string token) {
+    private async Task<string?> DelegateToken(string token)
+    {
         DiscoveryDocumentResponse? disco = await DiscoveryCache.GetAsync();
-        if (disco.IsError) {
+        if (disco.IsError)
+        {
             return null;
         }
 
-        TokenResponse? response = await _httpClient.RequestTokenExchangeTokenAsync(new TokenExchangeTokenRequest {
+        TokenResponse? response = await _httpClient.RequestTokenExchangeTokenAsync(new TokenExchangeTokenRequest
+        {
             Address = disco.TokenEndpoint,
             ClientId = "api",
             ClientSecret = "secret",

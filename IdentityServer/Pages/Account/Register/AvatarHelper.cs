@@ -1,11 +1,14 @@
 ﻿namespace IdentityServer.Pages.Account.Register;
 
-public class AvatarHelper {
+public class AvatarHelper
+{
     private Uri _avatarUrl;
 
-    public Uri AvatarUrl {
+    public Uri AvatarUrl
+    {
         get => _avatarUrl;
-        set {
+        set
+        {
             _avatarUrl = value;
             _avatarInput = value.ToString();
         }
@@ -13,25 +16,31 @@ public class AvatarHelper {
 
     private string _avatarInput;
 
-    public string AvatarInput {
+    public string AvatarInput
+    {
         get => _avatarInput;
-        set {
+        set
+        {
             _avatarInput = value;
-            if (Uri.TryCreate(value, UriKind.Absolute, out Uri url)) {
+            if (Uri.TryCreate(value, UriKind.Absolute, out Uri url))
+            {
                 AvatarUrl = url;
             }
         }
     }
 
-    public AvatarHelper() {
+    public AvatarHelper()
+    {
         AvatarUrl = GetRandomAvatar();
     }
 
-    public void RandomizeAvatar() {
+    public void RandomizeAvatar()
+    {
         AvatarUrl = GetRandomAvatar();
     }
 
-    private static Uri GetRandomAvatar() {
+    private static Uri GetRandomAvatar()
+    {
         return new Uri($"https://gravatar.com/avatar/{Guid.NewGuid().ToString("N")}?s=400&d=retro");
     }
 }

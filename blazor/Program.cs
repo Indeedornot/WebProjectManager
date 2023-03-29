@@ -1,4 +1,4 @@
-using blazor;
+﻿using blazor;
 using blazor.Api;
 
 using Microsoft.IdentityModel.Logging;
@@ -21,12 +21,14 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<HeaderHandler>();
 builder.Services.AddRefitClient<IProjectClient>()
-    .ConfigureHttpClient(c => {
+    .ConfigureHttpClient(c =>
+    {
         c.BaseAddress = new Uri(IPs.Api);
     }).AddHttpMessageHandler<HeaderHandler>();
 
 builder.Services.AddRefitClient<IUserClient>()
-    .ConfigureHttpClient(c => {
+    .ConfigureHttpClient(c =>
+    {
         c.BaseAddress = new Uri(IPs.Api);
     }).AddHttpMessageHandler<HeaderHandler>();
 
@@ -34,11 +36,13 @@ builder.Services.AddRefitClient<IUserClient>()
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.RunTailwind("build", "./");
     IdentityModelEventSource.ShowPII = true;
 }
-else {
+else
+{
     app.RunTailwind("release", "./");
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.

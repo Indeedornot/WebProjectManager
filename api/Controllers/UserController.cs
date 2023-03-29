@@ -9,22 +9,26 @@ using shared.Models;
 namespace api.Controllers;
 
 [ApiController]
-public class UserController : ControllerBase {
+public class UserController : ControllerBase
+{
     private readonly IUserClient _userClient;
     private readonly DataContext _dbContext;
     private readonly EntityHandler _entityHandler;
 
-    public UserController(IUserClient userClient, DataContext dbContext, EntityHandler entityHandler) {
+    public UserController(IUserClient userClient, DataContext dbContext, EntityHandler entityHandler)
+    {
         _userClient = userClient;
         _dbContext = dbContext;
         _entityHandler = entityHandler;
     }
 
     [HttpGet("Users")]
-    public async Task<IEnumerable<UserDTO>> GetUsers() {
+    public async Task<IEnumerable<UserDTO>> GetUsers()
+    {
         IEnumerable<ApplicationUserDTO> users = await _userClient.GetAllUsers();
 
-        IEnumerable<UserDTO> usersDto = users.Select(x => new UserDTO {
+        IEnumerable<UserDTO> usersDto = users.Select(x => new UserDTO
+        {
             Id = x.Id,
             Name = x.Name,
             Avatar = x.Avatar,
@@ -35,9 +39,11 @@ public class UserController : ControllerBase {
     }
 
     [HttpGet("User/{id}")]
-    public async Task<UserDTO?> GetUser(string id) {
+    public async Task<UserDTO?> GetUser(string id)
+    {
         ApplicationUserDTO? user = await _userClient.GetUserById(id);
-        if (user == null) {
+        if (user == null)
+        {
             return null;
         }
 
@@ -47,11 +53,13 @@ public class UserController : ControllerBase {
     }
 
     [HttpGet("User/Projects/{id}")]
-    public async Task<IEnumerable<ProjectDTO>> GetUserProjects(string id) {
+    public async Task<IEnumerable<ProjectDTO>> GetUserProjects(string id)
+    {
         ProjectUser? user = _dbContext.Users
             .Include(x => x.Projects)
             .FirstOrDefault(x => x.UserId == id);
-        if (user == null) {
+        if (user == null)
+        {
             throw new Exception("User not found");
         }
 

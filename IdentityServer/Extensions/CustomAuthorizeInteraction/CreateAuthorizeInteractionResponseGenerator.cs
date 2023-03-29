@@ -8,17 +8,21 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace IdentityServer.Extensions.CustomAuthorizeInteraction;
 
-public class CreateAuthorizeInteractionResponseGenerator : AuthorizeInteractionResponseGenerator {
+public class CreateAuthorizeInteractionResponseGenerator : AuthorizeInteractionResponseGenerator
+{
     public CreateAuthorizeInteractionResponseGenerator(IdentityServerOptions options,
         ISystemClock clock,
         ILogger<AuthorizeInteractionResponseGenerator> logger,
         IConsentService consent,
         IProfileService profile)
-        : base(options, clock, logger, consent, profile) {
+        : base(options, clock, logger, consent, profile)
+    {
     }
 
-    public override async Task<InteractionResponse> ProcessInteractionAsync(ValidatedAuthorizeRequest request, ConsentResponse consent = null) {
-        if (!request.PromptModes.Contains("create")) {
+    public override async Task<InteractionResponse> ProcessInteractionAsync(ValidatedAuthorizeRequest request, ConsentResponse consent = null)
+    {
+        if (!request.PromptModes.Contains("create"))
+        {
             return await base.ProcessInteractionAsync(request, consent);
         }
 

@@ -1,23 +1,27 @@
-﻿using Duende.IdentityServer;
+﻿using System.Security.Claims;
+using System.Text.Json;
+
+using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Validation;
 
 using IdentityModel;
 
-using System.Security.Claims;
-using System.Text.Json;
-
 namespace IdentityServer.Extensions.CustomValidation;
 
-public class CustomGrantValidators {
-    public class TokenExchangeGrantValidator : IExtensionGrantValidator {
+public class CustomGrantValidators
+{
+    public class TokenExchangeGrantValidator : IExtensionGrantValidator
+    {
         private readonly ITokenValidator _validator;
 
-        public TokenExchangeGrantValidator(ITokenValidator validator) {
+        public TokenExchangeGrantValidator(ITokenValidator validator)
+        {
             _validator = validator;
         }
 
-        public async Task ValidateAsync(ExtensionGrantValidationContext context) {
+        public async Task ValidateAsync(ExtensionGrantValidationContext context)
+        {
             // defaults
             context.Result = new GrantValidationResult(TokenRequestErrors.InvalidRequest);
             var customResponse =
@@ -27,16 +31,19 @@ public class CustomGrantValidators {
             string subjectTokenType = context.Request.Raw.Get(OidcConstants.TokenRequest.SubjectTokenType);
 
             // mandatory parameters
-            if (string.IsNullOrWhiteSpace(subjectToken)) {
+            if (string.IsNullOrWhiteSpace(subjectToken))
+            {
                 return;
             }
 
-            if (!string.Equals(subjectTokenType, OidcConstants.TokenTypeIdentifiers.AccessToken)) {
+            if (!string.Equals(subjectTokenType, OidcConstants.TokenTypeIdentifiers.AccessToken))
+            {
                 return;
             }
 
             TokenValidationResult validationResult = await _validator.ValidateAccessTokenAsync(subjectToken);
-            if (validationResult.IsError) {
+            if (validationResult.IsError)
+            {
                 return;
             }
 
@@ -45,8 +52,10 @@ public class CustomGrantValidators {
 
             string style = context.Request.Raw.Get("exchange_style");
 
-            switch (style) {
-                case "impersonation": {
+            switch (style)
+            {
+                case "impersonation":
+                    {
                         // set token client_id to original id
                         context.Request.ClientId = clientId;
 
@@ -56,7 +65,8 @@ public class CustomGrantValidators {
                             customResponse: customResponse);
                         break;
                     }
-                case "delegation": {
+                case "delegation":
+                    {
                         // set token client_id to original id
                         context.Request.ClientId = clientId;
 
@@ -71,7 +81,8 @@ public class CustomGrantValidators {
                             customResponse: customResponse);
                         break;
                     }
-                case "custom": {
+                case "custom":
+                    {
                         context.Result = new GrantValidationResult(
                             sub,
                             GrantType,

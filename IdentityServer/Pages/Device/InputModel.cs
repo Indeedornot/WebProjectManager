@@ -1,6 +1,7 @@
-namespace IdentityServer.Pages.Device;
+﻿namespace IdentityServer.Pages.Device;
 
-public class InputModel {
+public class InputModel
+{
     public string Button { get; set; }
     public IEnumerable<string> ScopesConsented { get; set; }
     public bool RememberConsent { get; set; } = true;

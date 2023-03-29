@@ -4,7 +4,8 @@ using shared.Models;
 
 namespace api.Api;
 
-public interface IUserClient {
+public interface IUserClient
+{
     [Get("/api/Hello")]
     Task<string?> GetHello();
 

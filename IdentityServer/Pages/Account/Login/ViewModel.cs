@@ -1,11 +1,12 @@
-// Copyright (c) Duende Software. All rights reserved.
+﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
 using IdentityServer.Models;
 
 namespace IdentityServer.Pages.Account.Login;
 
-public class ViewModel {
+public class ViewModel
+{
     public bool AllowRememberLogin { get; set; } = true;
     public bool EnableLocalLogin { get; set; } = true;
 

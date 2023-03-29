@@ -2,7 +2,8 @@
 
 namespace IdentityServer.Pages.Account.Register;
 
-public class ViewModel {
+public class ViewModel
+{
     public bool AllowRememberLogin { get; set; } = true;
     public bool EnableLocalLogin { get; set; } = true;
 

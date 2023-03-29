@@ -1,4 +1,4 @@
-using Duende.IdentityServer;
+﻿using Duende.IdentityServer;
 using Duende.IdentityServer.ResponseHandling;
 using Duende.IdentityServer.Validation;
 
@@ -16,8 +16,10 @@ using shared.Common;
 
 namespace IdentityServer;
 
-internal static class HostingExtensions {
-    public static WebApplication ConfigureServices(this WebApplicationBuilder builder) {
+internal static class HostingExtensions
+{
+    public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
+    {
         builder.Services.AddRazorPages();
 
         builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -28,7 +30,8 @@ internal static class HostingExtensions {
             .AddDefaultTokenProviders();
 
         IIdentityServerBuilder isBuilder = builder.Services
-            .AddIdentityServer(options => {
+            .AddIdentityServer(options =>
+            {
                 options.Events.RaiseErrorEvents = true;
                 options.Events.RaiseInformationEvents = true;
                 options.Events.RaiseFailureEvents = true;
@@ -49,12 +52,15 @@ internal static class HostingExtensions {
         isBuilder.AddProfileService<CustomProfileService>();
 
         isBuilder.Services.AddAuthentication()
-            .AddLocalApi(options => {
+            .AddLocalApi(options =>
+            {
                 options.ExpectedScope = Scopes.UserDataScope.Name;
             });
 
-        isBuilder.Services.AddAuthorization(options => {
-            options.AddPolicy(Scopes.UserDataPolicyName, policy => {
+        isBuilder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy(Scopes.UserDataPolicyName, policy =>
+            {
                 policy.AddAuthenticationSchemes(IdentityServerConstants.LocalApi.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
             });
@@ -73,10 +79,12 @@ internal static class HostingExtensions {
         return builder.Build();
     }
 
-    public static WebApplication ConfigurePipeline(this WebApplication app) {
+    public static WebApplication ConfigurePipeline(this WebApplication app)
+    {
         app.UseSerilogRequestLogging();
 
-        if (app.Environment.IsDevelopment()) {
+        if (app.Environment.IsDevelopment())
+        {
             app.UseDeveloperExceptionPage();
         }
 

@@ -1,4 +1,4 @@
-using api.Api;
+﻿using api.Api;
 using api.Database;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +23,8 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddRefitClient<IUserClient>()
-    .ConfigureHttpClient((opt) => {
+    .ConfigureHttpClient((opt) =>
+    {
         opt.BaseAddress = new Uri(IPs.IdentityServer);
     }).AddHttpMessageHandler<HeaderHandler>();
 
@@ -32,10 +33,12 @@ builder.Services.AddTransient<HeaderHandler>();
 builder.Services.AddTransient<EntityHandler>();
 
 //Require certain token
-builder.Services.AddAuthorization(options => {
+builder.Services.AddAuthorization(options =>
+{
     options.AddPolicy(
         Scopes.ProjectScope.Name,
-        policy => {
+        policy =>
+        {
             policy.RequireAuthenticatedUser();
             policy.RequireClaim("scope", Scopes.ProjectScope.Name);
         }
@@ -45,22 +48,27 @@ builder.Services.AddAuthorization(options => {
 //Require any token from IdentityServer
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(
-        options => {
+        options =>
+        {
             options.Authority = IPs.IdentityServer;
             options.TokenValidationParameters = new TokenValidationParameters { ValidateAudience = false, ValidTypes = new[] { "at+jwt" } };
         });
 
-builder.Services.AddOpenApiDocument(options => {
+builder.Services.AddOpenApiDocument(options =>
+{
     options.DocumentName = "v1";
     options.Title = "Protected API";
     options.Version = "v1";
 
     options.AddSecurity("oauth2",
-        new OpenApiSecurityScheme {
+        new OpenApiSecurityScheme
+        {
             Type = OpenApiSecuritySchemeType.OAuth2,
             Flow = OpenApiOAuth2Flow.AccessCode,
-            Flows = new OpenApiOAuthFlows {
-                AuthorizationCode = new OpenApiOAuthFlow {
+            Flows = new OpenApiOAuthFlows
+            {
+                AuthorizationCode = new OpenApiOAuthFlow
+                {
                     AuthorizationUrl = $"{IPs.IdentityServer}/connect/authorize",
                     TokenUrl = $"{IPs.IdentityServer}/connect/token",
                     Scopes = new Dictionary<string, string> { { Scopes.ProjectScope.Name, Scopes.ProjectScope.DisplayName } }
@@ -74,7 +82,8 @@ builder.Services.AddOpenApiDocument(options => {
 WebApplication? app = builder.Build();
 
 //ensure database is created
-using (IServiceScope scope = app.Services.CreateScope()) {
+using (IServiceScope scope = app.Services.CreateScope())
+{
     IServiceProvider services = scope.ServiceProvider;
     DataContext context = services.GetRequiredService<DataContext>();
     context.Database.Migrate();
@@ -88,9 +97,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) {
+if (app.Environment.IsDevelopment())
+{
     app.UseOpenApi();
-    app.UseSwaggerUi3(options => {
+    app.UseSwaggerUi3(options =>
+    {
         options.OAuth2Client = new OAuth2ClientSettings() { ClientId = "swagger", UsePkceWithAuthorizationCodeGrant = true };
     });
 }

@@ -10,7 +10,8 @@ using SharedIdentityResources = shared.Common.IdentityResources;
 
 namespace IdentityServer;
 
-public static class Config {
+public static class Config
+{
     public static IEnumerable<IdentityResource> IdentityResources =>
         new IdentityResource[] { new IdentityResources.OpenId(), new IdentityResources.Profile(), SharedIdentityResources.Avatar };
 

@@ -1,13 +1,15 @@
-﻿using IdentityModel;
+﻿using System.Security.Claims;
+
+using IdentityModel;
 
 using IdentityServer.Models;
 
-using System.Security.Claims;
-
 namespace IdentityServer.Data;
 
-public static class TestUsers {
-    public class TestUser {
+public static class TestUsers
+{
+    public class TestUser
+    {
         public ApplicationUser User;
         public string Password;
         public Claim[] Claims;

@@ -1,10 +1,11 @@
-// Copyright (c) Duende Software. All rights reserved.
+﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
 
 namespace IdentityServer.Pages.Ciba;
 
-public class ConsentOptions {
+public class ConsentOptions
+{
     public static bool EnableOfflineAccess = true;
     public static string OfflineAccessDisplayName = "Offline Access";
     public static string OfflineAccessDescription = "Access to your applications and resources, even when you are offline";

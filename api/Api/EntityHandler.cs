@@ -4,11 +4,13 @@ using shared.Models;
 
 namespace api.Api;
 
-public class EntityHandler {
+public class EntityHandler
+{
     private readonly IUserClient _userClient;
     private readonly DataContext _dbContext;
 
-    public EntityHandler(IUserClient userClient, DataContext dbContext) {
+    public EntityHandler(IUserClient userClient, DataContext dbContext)
+    {
         _userClient = userClient;
         _dbContext = dbContext;
     }
@@ -18,7 +20,8 @@ public class EntityHandler {
     /// </summary>
     /// <param name="project"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<UserDTO>> GetUsersByProject(Project project) {
+    public async Task<IEnumerable<UserDTO>> GetUsersByProject(Project project)
+    {
         IEnumerable<string> assignees = project.Assignees.Select(x => x.UserId);
         IEnumerable<ApplicationUserDTO> users = await _userClient.GetUsersByIds(assignees);
         return users.Select(u => new UserDTO { Id = u.Id, Name = u.Name, Avatar = u.Avatar });
@@ -29,7 +32,8 @@ public class EntityHandler {
     /// </summary>
     /// <param name="projects"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<UserDTO>> GetUsersByProjects(IEnumerable<Project> projects) {
+    public async Task<IEnumerable<UserDTO>> GetUsersByProjects(IEnumerable<Project> projects)
+    {
         // Get all distinct user ids
         IEnumerable<string> assignees = projects
             .SelectMany(p => p.Assignees)
@@ -49,7 +53,8 @@ public class EntityHandler {
     /// Previously fetched users <see cref="GetUsersByProjects" />
     /// </param>
     /// <returns></returns>
-    public IEnumerable<UserDTO> GetProjectUsers(Project project, IEnumerable<UserDTO> appUsers) {
+    public IEnumerable<UserDTO> GetProjectUsers(Project project, IEnumerable<UserDTO> appUsers)
+    {
         return appUsers.Where(u => project.Assignees.Any(a => a.UserId == u.Id));
     }
 
@@ -59,8 +64,10 @@ public class EntityHandler {
     /// <param name="projects"></param>
     /// <param name="users"></param>
     /// <returns></returns>
-    public IEnumerable<ProjectDTO> ConnectProjectsWithUsers(IEnumerable<Project> projects, IEnumerable<UserDTO> users) {
-        return projects.Select(p => new ProjectDTO {
+    public IEnumerable<ProjectDTO> ConnectProjectsWithUsers(IEnumerable<Project> projects, IEnumerable<UserDTO> users)
+    {
+        return projects.Select(p => new ProjectDTO
+        {
             Id = p.Id,
             Name = p.Name,
             Description = p.Description,
@@ -75,7 +82,8 @@ public class EntityHandler {
     /// </summary>
     /// <param name="projects"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<ProjectDTO>> GetProjectsWithUsers(IEnumerable<Project> projects) {
+    public async Task<IEnumerable<ProjectDTO>> GetProjectsWithUsers(IEnumerable<Project> projects)
+    {
         IEnumerable<UserDTO> users = await GetUsersByProjects(projects);
         return ConnectProjectsWithUsers(projects, users);
     }
@@ -85,9 +93,11 @@ public class EntityHandler {
     /// </summary>
     /// <param name="project"></param>
     /// <returns></returns>
-    public async Task<ProjectDTO> GetProjectWithUsers(Project project) {
+    public async Task<ProjectDTO> GetProjectWithUsers(Project project)
+    {
         IEnumerable<UserDTO> users = await GetUsersByProject(project);
-        return new ProjectDTO {
+        return new ProjectDTO
+        {
             Id = project.Id,
             Name = project.Name,
             Description = project.Description,
@@ -102,7 +112,8 @@ public class EntityHandler {
     /// </summary>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public IEnumerable<int> GetProjectIdsForUser(string userId) {
+    public IEnumerable<int> GetProjectIdsForUser(string userId)
+    {
         IQueryable<int> projectIds = _dbContext.Users
             .Where(pu => pu.UserId == userId)
             .SelectMany(pu => pu.Projects)
@@ -111,7 +122,8 @@ public class EntityHandler {
         return projectIds;
     }
 
-    public bool IsUserInProject(Project project, string userId) {
+    public bool IsUserInProject(Project project, string userId)
+    {
         return project.Assignees.Any(a => a.UserId == userId);
     }
 
@@ -120,7 +132,8 @@ public class EntityHandler {
     /// </summary>
     /// <param name="userIds"></param>
     /// <returns></returns>
-    public IEnumerable<ProjectUser> GetExistingUsers(IEnumerable<string> userIds) {
+    public IEnumerable<ProjectUser> GetExistingUsers(IEnumerable<string> userIds)
+    {
         return _dbContext.Users.Where(u => userIds.Contains(u.UserId));
     }
 
@@ -129,7 +142,8 @@ public class EntityHandler {
     /// </summary>
     /// <param name="users"></param>
     /// <returns></returns>
-    public IEnumerable<ProjectUser> GetNewUsers(IEnumerable<string> users) {
+    public IEnumerable<ProjectUser> GetNewUsers(IEnumerable<string> users)
+    {
         return users.Where(u => !_dbContext.Users.Any(x => x.UserId == u))
             .Select(x => new ProjectUser() { UserId = x });
     }

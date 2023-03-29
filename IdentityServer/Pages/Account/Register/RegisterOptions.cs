@@ -1,6 +1,7 @@
 ﻿namespace IdentityServer.Pages.Account.Register;
 
-public class RegisterOptions {
+public class RegisterOptions
+{
     public static bool AllowLocalLogin = true;
     public static bool AllowRememberLogin = true;
     public static TimeSpan RememberMeLoginDuration = TimeSpan.FromDays(30);

@@ -6,21 +6,26 @@ using shared.Common;
 
 namespace blazor;
 
-public static class HostingExtensions {
-    public static IServiceCollection AddConfiguredIdentityServer(this IServiceCollection services) {
+public static class HostingExtensions
+{
+    public static IServiceCollection AddConfiguredIdentityServer(this IServiceCollection services)
+    {
         services.AddBff();
 
         services.AddAuthentication(
-                options => {
+                options =>
+                {
                     options.DefaultScheme = "cookie";
                     options.DefaultChallengeScheme = "oidc";
                     options.DefaultSignOutScheme = "oidc";
                 })
-            .AddCookie("cookie", options => {
+            .AddCookie("cookie", options =>
+            {
                 options.Cookie.Name = "__Host-blazor";
                 options.Cookie.SameSite = SameSiteMode.Strict;
             })
-            .AddOpenIdConnect("oidc", options => {
+            .AddOpenIdConnect("oidc", options =>
+            {
                 options.Authority = IPs.IdentityServer;
 
                 options.ClientId = "web";

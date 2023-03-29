@@ -5,7 +5,8 @@ using shared.Models;
 
 namespace blazor.Api;
 
-public interface IProjectClient {
+public interface IProjectClient
+{
     [Get(Routes.Hello)]
     Task<string> Hello();
 
