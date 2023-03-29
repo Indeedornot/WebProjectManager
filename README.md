@@ -14,9 +14,12 @@
 
 ### Built With
 
+<div>
 <image src="https://raw.githubusercontent.com/Indeedornot/README_icons/3454466b1b34e42f17c5104d222219c9485129b7/language_and_tools/square/c%23/c%23.svg" />
-<image src="https://raw.githubusercontent.com/Indeedornot/README_icons/2cc2c6a6d95f2142441267c6f44467ed1c9224cf/language_and_tools/square/asp.net-core/asp.net-core.svg" style="background-color:white;" width=76 height=76/>
-<image src="https://raw.githubusercontent.com/Indeedornot/README_icons/2cc2c6a6d95f2142441267c6f44467ed1c9224cf/language_and_tools/square/blazor/blazor.svg" width=76 height=76 style="margin-left: 5px"/>
+<image src="https://raw.githubusercontent.com/Indeedornot/README_icons/2cc2c6a6d95f2142441267c6f44467ed1c9224cf/language_and_tools/square/asp.net-core/asp.net-core.svg" width=76 height=76/>
+<image src="https://raw.githubusercontent.com/Indeedornot/README_icons/2cc2c6a6d95f2142441267c6f44467ed1c9224cf/language_and_tools/square/blazor/blazor.svg" width=76 height=76/>
+</div>
+    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ABOUT THE PROJECT -->
